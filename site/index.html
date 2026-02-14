@@ -2,7 +2,8 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f172a">
   <title>Jardine Residence — Seu novo endereço</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,7 +37,10 @@
   <header class="cabecalho" id="cabecalho">
     <div class="cabecalho-inner">
       <a href="#inicio" class="logo">Jardine Residence</a>
-      <nav class="nav">
+      <button type="button" class="nav-toggle" id="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-overlay">
+        <span class="nav-toggle-icon"></span>
+      </button>
+      <nav class="nav" aria-label="Navegação principal">
         <span class="nav-idioma"><a href="index.html" class="nav-idioma-link ativo" hreflang="pt" aria-current="page">PT</a> <a href="index-es.html" class="nav-idioma-link" hreflang="es">ES</a></span>
         <a href="#apresentacao">Apresentação</a>
         <a href="#destaques">Diferenciais</a>
@@ -51,6 +55,19 @@
       </nav>
     </div>
   </header>
+  <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
+    <a href="#apresentacao" class="nav-link">Apresentação</a>
+    <a href="#destaques" class="nav-link">Diferenciais</a>
+    <a href="#plantas" class="nav-link">Plantas</a>
+    <a href="#localizacao" class="nav-link">Localização</a>
+    <a href="#lazer" class="nav-link">Lazer</a>
+    <a href="#video" class="nav-link">Vídeo</a>
+    <a href="#galeria" class="nav-link">Ambientes</a>
+    <a href="#forma-pagamento" class="nav-link">Condições</a>
+    <a href="#corretora" class="nav-link">Corretora</a>
+    <a href="#contato" class="nav-link nav-cta">Fale conosco</a>
+    <span class="nav-idioma"><a href="index.html" class="nav-idioma-link ativo" hreflang="pt" aria-current="page">PT</a> <a href="index-es.html" class="nav-idioma-link" hreflang="es">ES</a></span>
+  </div>
 
   <main>
     <section class="hero" id="inicio">
@@ -628,6 +645,42 @@
       }
       window.addEventListener('scroll', updateHeader, { passive: true });
       updateHeader();
+    })();
+
+    (function() {
+      var toggle = document.getElementById('nav-toggle');
+      var overlay = document.getElementById('nav-overlay');
+      var header = document.getElementById('cabecalho');
+      if (!toggle || !overlay || !header) return;
+      function abrir() {
+        overlay.classList.add('aberto');
+        overlay.setAttribute('aria-hidden', 'false');
+        header.classList.add('nav-aberto');
+        toggle.setAttribute('aria-expanded', 'true');
+        toggle.setAttribute('aria-label', 'Fechar menu');
+        document.body.style.overflow = 'hidden';
+      }
+      function fechar() {
+        overlay.classList.remove('aberto');
+        overlay.setAttribute('aria-hidden', 'true');
+        header.classList.remove('nav-aberto');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-label', 'Abrir menu');
+        document.body.style.overflow = '';
+      }
+      toggle.addEventListener('click', function() {
+        if (overlay.classList.contains('aberto')) fechar();
+        else abrir();
+      });
+      overlay.querySelectorAll('.nav-link').forEach(function(link) {
+        link.addEventListener('click', fechar);
+      });
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && overlay.classList.contains('aberto')) fechar();
+      });
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 900 && overlay.classList.contains('aberto')) fechar();
+      });
     })();
 
     (function() {
