@@ -2,12 +2,13 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="refresh" content="0; url=site/">
-  <title>Jardine Residence — Redirecionando...</title>
-  <script>window.location.replace("site/");</script>
+  <title>Jardine Residence</title>
+  <script>
+    (function() {
+      var p = location.pathname.replace(/\/?$/, '');
+      if (p.indexOf('/site') === -1) location.replace(p + '/site/');
+    })();
+  </script>
 </head>
-<body>
-  <p>Redirecionando para o site… <a href="site/">Clique aqui se não for redirecionado</a>.</p>
-</body>
+<body></body>
 </html>
