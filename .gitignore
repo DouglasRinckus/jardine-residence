@@ -1,0 +1,22 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+
+# Env (se usar no futuro)
+.env
+.env.local
+
+# Vídeos (GitHub limita 100 MB por arquivo)
+*.mp4
+*.mov
+*.avi
