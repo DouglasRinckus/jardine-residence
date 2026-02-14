@@ -582,7 +582,16 @@
           if (imgEl.complete) imgEl.style.opacity = '1';
         } else {
           var pdfSrc = item.src;
-          if (window.innerWidth <= 768 && pdfSrc.indexOf('#') === -1) pdfSrc += '#view=FitH';
+          if (window.innerWidth <= 768 && pdfSrc.indexOf('#') === -1) {
+            pdfSrc += '#zoom=page-width';
+            iframeEl.style.width = window.innerWidth + 'px';
+            iframeEl.style.height = (window.innerHeight - 70) + 'px';
+            iframeEl.style.maxWidth = '100%';
+          } else {
+            iframeEl.style.width = '';
+            iframeEl.style.height = '';
+            iframeEl.style.maxWidth = '';
+          }
           iframeEl.src = pdfSrc;
           iframeEl.style.display = 'block';
         }
