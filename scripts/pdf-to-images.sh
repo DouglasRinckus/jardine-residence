@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Converte cada página dos PDFs do site em PNG e gera manifest para o lightbox.
 # Qualidade: DPI (padrão 300). Para mais nitidez: PDF_DPI=400 ./scripts/pdf-to-images.sh
+# Para carregar mais rápido na web (arquivos menores): PDF_DPI=150 ./scripts/pdf-to-images.sh
 # Requer: pdftoppm (brew install poppler)
 set -e
 BASE="$(cd "$(dirname "$0")/.." && pwd)"

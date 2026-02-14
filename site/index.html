@@ -565,6 +565,14 @@
         if (itens[indiceAtual + 1] && itens[indiceAtual + 1].tipo === 'image') { var o = new Image(); o.src = fullUrl(itens[indiceAtual + 1].src); }
         if (itens[indiceAtual - 1] && itens[indiceAtual - 1].tipo === 'image') { var o = new Image(); o.src = fullUrl(itens[indiceAtual - 1].src); }
       }
+      function preloadAllApresentacao() {
+        var m = imgManifest;
+        if (!m || !m.apresentacao || !m.apresentacao.length) return;
+        m.apresentacao.forEach(function(src) {
+          var img = new Image();
+          img.src = fullUrl(src);
+        });
+      }
 
       function abrirLightbox(lista, idx) {
         itens = lista;
@@ -629,6 +637,23 @@
         indiceAtual = indiceAtual >= itens.length - 1 ? 0 : indiceAtual + 1;
         mostrarItem();
       }
+
+      var touchStartX = 0;
+      lightbox.addEventListener('touchstart', function(e) {
+        if (e.target.closest('button')) return;
+        touchStartX = e.changedTouches ? e.changedTouches[0].clientX : e.touches[0].clientX;
+      }, { passive: true });
+      lightbox.addEventListener('touchend', function(e) {
+        if (e.target.closest('button')) return;
+        if (lightbox.getAttribute('aria-hidden') === 'true') return;
+        var touchEndX = e.changedTouches ? e.changedTouches[0].clientX : 0;
+        var delta = touchStartX - touchEndX;
+        if (Math.abs(delta) > 50) {
+          if (delta > 0) proximo();
+          else anterior();
+        }
+      }, { passive: true });
+
       lightbox.addEventListener('click', function(e) {
         if (e.target === lightbox) fecharLightbox();
       });
@@ -676,7 +701,11 @@
           if (embed) embed.style.display = 'none';
         });
       }
-      (window.__manifestReady || Promise.resolve(null)).then(function(m) { imgManifest = m || imgManifest; applyPlantPreviews(imgManifest); });
+      (window.__manifestReady || Promise.resolve(null)).then(function(m) {
+        imgManifest = m || imgManifest;
+        applyPlantPreviews(imgManifest);
+        preloadAllApresentacao();
+      });
 
       document.querySelectorAll('#galeria-plantas .planta-item').forEach(function(fig, i) {
         var pdf = fig.getAttribute('data-pdf');
