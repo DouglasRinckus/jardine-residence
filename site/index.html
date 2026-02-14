@@ -11,7 +11,43 @@
   <link rel="stylesheet" href="estilos.css">
   <link rel="preload" href="https://media.githubusercontent.com/media/DouglasRinckus/jardine-residence/main/4.%20V%C3%ADdeo%20das%20alturas/capitali_-_jardine__(5)%20(1080p)_alt3.mp4" as="video">
   <link rel="preload" href="../7. Imagens /Fachada /Jardine - Externa fim de tarde - R1 - 01.jpeg" as="image">
+  <link rel="preload" href="../7. Imagens /Apartamentos /TIPO 1/Jardine - Suite Tipo 01 - RF - 01.jpg" as="image">
+  <link rel="preload" href="../7. Imagens /Apartamentos /TIPO 1/Living Tipo 01 - RF - 01.jpg" as="image">
+  <link rel="preload" href="../7. Imagens /Apartamentos /TIPO 2/Jardine - Living tipo 02 - RF - 01.jpg" as="image">
+  <link rel="preload" href="../7. Imagens /Apartamentos /TIPO 2/Jardine - Suite Tipo 02 - RF - 01.jpg" as="image">
+  <link rel="preload" href="../7. Imagens /Apartamentos /TIPO 3/Jardine - Living tipo 03 vista 01 - RF - 01.jpg" as="image">
+  <link rel="preload" href="../7. Imagens /Apartamentos /TIPO 4/Jardine - Living Tipo 04 - RF - 01.jpg" as="image">
+  <link rel="preload" href="../7. Imagens /Apartamentos /TIPO 5/Jardine - Living Tipo 05 - RF - 01.jpg" as="image">
+  <link rel="preload" href="../7. Imagens /Apartamentos /TIPO 5/Jardine - Suite Tipo 05 - RF - 01.jpg" as="image">
+  <link rel="preload" href="../7. Imagens /Apartamentos /TIPO 6/Jardine - Living Tipo 06 - RF - 01.jpg" as="image">
+  <link rel="preload" href="../1. Apresentação Clientes/Capitali - Jardine Residence - 05 - Clientes (1).pdf" as="fetch">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    (function() {
+      var pdfs = [
+        '../2. Plantas apartamentos/LOCALIZAÇÃO PLANTA.pdf',
+        '../2. Plantas apartamentos/Tipo 01_MKT_R00.pdf',
+        '../2. Plantas apartamentos/Tipo 02_MKT_R00.pdf',
+        '../2. Plantas apartamentos/Tipo 03_MKT_R00.pdf',
+        '../2. Plantas apartamentos/Tipo 04_MKT_R00.pdf',
+        '../2. Plantas apartamentos/Tipo 05_MKT_R00.pdf',
+        '../2. Plantas apartamentos/Tipo 06_MKT_R00.pdf',
+        '../3. Plantas lazer/JD_ARQ EXE_AP_Planta Baixa_G5_R31.pdf',
+        '../3. Plantas lazer/JD_ARQ EXE_AP_Planta Baixa_RFT_R32.pdf'
+      ];
+      function preloadPdfs() {
+        pdfs.forEach(function(url) {
+          var link = document.createElement('link');
+          link.rel = 'preload';
+          link.as = 'fetch';
+          link.href = url;
+          document.head.appendChild(link);
+        });
+      }
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', preloadPdfs);
+      else preloadPdfs();
+    })();
+  </script>
 </head>
 <body>
   <header class="cabecalho" id="cabecalho">
@@ -527,9 +563,12 @@
         imgEl.style.display = 'none';
         iframeEl.style.display = 'none';
         if (item.tipo === 'image') {
-          imgEl.src = item.src;
+          imgEl.style.opacity = '0';
           imgEl.alt = item.legenda || '';
           imgEl.style.display = 'block';
+          imgEl.onload = function() { imgEl.style.opacity = '1'; };
+          imgEl.src = item.src;
+          if (imgEl.complete) imgEl.style.opacity = '1';
         } else {
           iframeEl.src = item.src;
           iframeEl.style.display = 'block';

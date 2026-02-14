@@ -855,6 +855,7 @@ body {
   width: auto;
   height: auto;
   object-fit: contain;
+  transition: opacity 0.2s ease;
 }
 
 .lightbox-iframe {
