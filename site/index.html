@@ -425,10 +425,6 @@
     <div class="lightbox-conteudo">
       <img class="lightbox-img" id="lightbox-img" src="" alt="" style="display:none;">
       <iframe class="lightbox-iframe" id="lightbox-iframe" style="display:none;" title="PDF"></iframe>
-      <div class="lightbox-pdf" id="lightbox-pdf" style="display:none;">
-        <canvas id="lightbox-pdf-canvas"></canvas>
-        <div class="lightbox-pdf-loading" id="lightbox-pdf-loading">Carregando…</div>
-      </div>
     </div>
     <div class="lightbox-info">
       <span class="lightbox-contador" id="lightbox-contador"></span>
@@ -552,34 +548,6 @@
       var itens = [];
       var indiceAtual = 0;
       var tipoAtual = 'image';
-      var lightboxPdfDoc = null;
-      var lightboxPdfPage = 1;
-      var lightboxPdfTotalPages = 0;
-      var pdfWrap = document.getElementById('lightbox-pdf');
-      var pdfCanvas = document.getElementById('lightbox-pdf-canvas');
-      var pdfLoading = document.getElementById('lightbox-pdf-loading');
-      var usePdfJsMobile = window.innerWidth <= 768;
-
-      function renderLightboxPdfPage(num) {
-        if (!lightboxPdfDoc || !pdfCanvas) return;
-        lightboxPdfPage = Math.max(1, Math.min(num, lightboxPdfTotalPages));
-        var container = pdfWrap || pdfCanvas.parentElement;
-        var w = (container && container.clientWidth > 0) ? container.clientWidth : window.innerWidth;
-        lightboxPdfDoc.getPage(lightboxPdfPage).then(function(page) {
-          var v1 = page.getViewport({ scale: 1 });
-          var scale = w / v1.width;
-          var viewport = page.getViewport({ scale: scale });
-          pdfCanvas.height = viewport.height;
-          pdfCanvas.width = viewport.width;
-          page.render({ canvasContext: pdfCanvas.getContext('2d'), viewport: viewport });
-          if (pdfLoading) pdfLoading.style.display = 'none';
-          contador.textContent = lightboxPdfTotalPages > 1 ? 'Pág. ' + lightboxPdfPage + ' / ' + lightboxPdfTotalPages : (legenda ? legenda.textContent : '');
-        });
-      }
-
-      function lightboxPdfUsaPaginas() {
-        return usePdfJsMobile && lightboxPdfDoc && itens.length === 1 && lightboxPdfTotalPages > 1;
-      }
 
       function abrirLightbox(lista, idx) {
         itens = lista;
@@ -588,7 +556,6 @@
         lightbox.setAttribute('aria-hidden', 'false');
         lightbox.classList.add('lightbox-aberto');
         document.body.style.overflow = 'hidden';
-        usePdfJsMobile = window.innerWidth <= 768;
         mostrarItem();
         fechar.focus();
       }
@@ -599,10 +566,6 @@
         document.body.style.overflow = '';
         iframeEl.src = '';
         imgEl.src = '';
-        if (pdfWrap) pdfWrap.style.display = 'none';
-        lightboxPdfDoc = null;
-        lightboxPdfPage = 1;
-        lightboxPdfTotalPages = 0;
       }
 
       function mostrarItem() {
@@ -610,8 +573,6 @@
         if (!item) return;
         imgEl.style.display = 'none';
         iframeEl.style.display = 'none';
-        if (pdfWrap) pdfWrap.style.display = 'none';
-        if (pdfLoading) pdfLoading.style.display = 'block';
         iframeEl.style.width = '';
         iframeEl.style.height = '';
         iframeEl.style.maxWidth = '';
@@ -622,43 +583,16 @@
           imgEl.onload = function() { imgEl.style.opacity = '1'; };
           imgEl.src = item.src;
           if (imgEl.complete) imgEl.style.opacity = '1';
-          contador.textContent = (indiceAtual + 1) + ' / ' + itens.length;
-          legenda.textContent = item.legenda || '';
-          prev.style.visibility = itens.length > 1 ? 'visible' : 'hidden';
-          next.style.visibility = itens.length > 1 ? 'visible' : 'hidden';
-          return;
-        }
-        if (usePdfJsMobile && typeof pdfjsLib !== 'undefined') {
-          pdfWrap.style.display = 'flex';
-          pdfCanvas.style.display = 'block';
-          lightboxPdfDoc = null;
-          lightboxPdfPage = 1;
-          lightboxPdfTotalPages = 0;
-          legenda.textContent = item.legenda || '';
-          pdfjsLib.getDocument(item.src).promise.then(function(pdf) {
-            lightboxPdfDoc = pdf;
-            lightboxPdfTotalPages = pdf.numPages;
-            var mostraNav = itens.length > 1 || lightboxPdfTotalPages > 1;
-            prev.style.visibility = mostraNav ? 'visible' : 'hidden';
-            next.style.visibility = mostraNav ? 'visible' : 'hidden';
-            renderLightboxPdfPage(1);
-          }).catch(function() {
-            if (pdfLoading) pdfLoading.style.display = 'none';
-            iframeEl.src = item.src;
-            iframeEl.style.display = 'block';
-            pdfWrap.style.display = 'none';
-          });
-          contador.textContent = 'Carregando…';
-          return;
-        }
-        iframeEl.style.display = 'block';
-        if (window.innerWidth <= 768 && item.src.indexOf('#') === -1) {
-          iframeEl.style.width = window.innerWidth + 'px';
-          iframeEl.style.height = (window.innerHeight - 70) + 'px';
-          iframeEl.style.maxWidth = '100%';
-          iframeEl.src = item.src + '#view=Fit';
         } else {
-          iframeEl.src = item.src;
+          iframeEl.style.display = 'block';
+          if (window.innerWidth <= 768 && item.src.indexOf('#') === -1) {
+            iframeEl.style.width = window.innerWidth + 'px';
+            iframeEl.style.height = (window.innerHeight - 70) + 'px';
+            iframeEl.style.maxWidth = '100%';
+            iframeEl.src = item.src + '#view=Fit';
+          } else {
+            iframeEl.src = item.src;
+          }
         }
         contador.textContent = (indiceAtual + 1) + ' / ' + itens.length;
         legenda.textContent = item.legenda || '';
@@ -667,30 +601,16 @@
       }
 
       function anterior() {
-        if (lightboxPdfUsaPaginas()) {
-          renderLightboxPdfPage(lightboxPdfPage - 1);
-          return;
-        }
         if (itens.length <= 1) return;
         indiceAtual = indiceAtual <= 0 ? itens.length - 1 : indiceAtual - 1;
         mostrarItem();
       }
 
       function proximo() {
-        if (lightboxPdfUsaPaginas()) {
-          renderLightboxPdfPage(lightboxPdfPage + 1);
-          return;
-        }
         if (itens.length <= 1) return;
         indiceAtual = indiceAtual >= itens.length - 1 ? 0 : indiceAtual + 1;
         mostrarItem();
       }
-
-      window.addEventListener('resize', function() {
-        if (lightbox.getAttribute('aria-hidden') === 'true') return;
-        usePdfJsMobile = window.innerWidth <= 768;
-        if (lightboxPdfDoc && pdfWrap && pdfWrap.style.display !== 'none') renderLightboxPdfPage(lightboxPdfPage);
-      });
       lightbox.addEventListener('click', function(e) {
         if (e.target === lightbox) fecharLightbox();
       });
