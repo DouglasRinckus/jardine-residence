@@ -9,6 +9,28 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="estilos.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    (function() {
+      var videoSrc = '../4. Vídeo das alturas/capitali_-_jardine__(5) (1080p)_alt3.mp4';
+      var isGitHubPages = window.location.hostname && window.location.hostname.indexOf('github.io') !== -1;
+      if (isGitHubPages) {
+        videoSrc = 'https://media.githubusercontent.com/media/DouglasRinckus/jardine-residence/main/4.%20V%C3%ADdeo%20das%20alturas/capitali_-_jardine__(5)%20(1080p)_alt3.mp4';
+        var link = document.createElement('link');
+        link.rel = 'preload';
+        link.as = 'video';
+        link.href = videoSrc;
+        document.head.appendChild(link);
+      }
+      document.addEventListener('DOMContentLoaded', function() {
+        var v = document.querySelector('.video-destaque video');
+        if (v) {
+          var s = v.querySelector('source');
+          if (s) s.src = videoSrc;
+          v.preload = 'auto';
+        }
+      });
+    })();
+  </script>
 </head>
 <body>
   <header class="cabecalho" id="cabecalho">
@@ -95,7 +117,7 @@
         <h2 class="secao-titulo">Vídeo del emprendimiento</h2>
         <p class="secao-descricao">Vea las alturas, la fachada y lo que le espera en Jardine Residence.</p>
         <div class="video-wrapper video-destaque">
-          <video controls preload="metadata" playsinline>
+          <video controls preload="auto" playsinline>
             <source src="../4. Vídeo das alturas/capitali_-_jardine__(5) (1080p)_alt3.mp4" type="video/mp4">
             Su navegador no soporta vídeo HTML5.
           </video>
@@ -390,6 +412,7 @@
       var pdfDoc = null;
       var pageNum = 1;
       var totalPages = 0;
+      var pageCache = [];
       var canvas = document.getElementById('pdf-canvas');
       var loading = document.getElementById('pdf-loading');
       var erro = document.getElementById('pdf-erro');
@@ -425,15 +448,27 @@
       function renderPage(num) {
         if (!pdfDoc) return;
         pageNum = Math.max(1, Math.min(num, totalPages));
-        pdfDoc.getPage(pageNum).then(function(page) {
+        var page = pageCache[pageNum - 1];
+        if (page) {
           var scale = 1.5;
           var viewport = page.getViewport({ scale: scale });
           canvas.height = viewport.height;
           canvas.width = viewport.width;
           page.render({ canvasContext: canvas.getContext('2d'), viewport: viewport });
           indice.textContent = 'Página ' + pageNum + ' de ' + totalPages;
-          btnPrev.disabled = pageNum <= 1;
-          btnNext.disabled = pageNum >= totalPages;
+          if (btnPrev) btnPrev.disabled = pageNum <= 1;
+          if (btnNext) btnNext.disabled = pageNum >= totalPages;
+          return;
+        }
+        pdfDoc.getPage(pageNum).then(function(p) {
+          var scale = 1.5;
+          var viewport = p.getViewport({ scale: scale });
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
+          p.render({ canvasContext: canvas.getContext('2d'), viewport: viewport });
+          indice.textContent = 'Página ' + pageNum + ' de ' + totalPages;
+          if (btnPrev) btnPrev.disabled = pageNum <= 1;
+          if (btnNext) btnNext.disabled = pageNum >= totalPages;
         });
       }
 
@@ -441,7 +476,13 @@
         pdfDoc = pdf;
         totalPages = pdf.numPages;
         if (loading) loading.style.display = 'none';
-        renderPage(1);
+        var loadFirst = pdf.getPage(1).then(function(p) { pageCache[0] = p; return p; });
+        loadFirst.then(function() { renderPage(1); });
+        for (var p = 2; p <= totalPages; p++) {
+          (function(idx) {
+            pdf.getPage(idx).then(function(page) { pageCache[idx - 1] = page; }).catch(function() {});
+          })(p);
+        }
       }).catch(function() {
         showIframeFallback();
       });
