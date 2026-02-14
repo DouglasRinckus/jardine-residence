@@ -21,12 +21,13 @@
   <link rel="preload" href="../7. Imagens /Apartamentos /TIPO 5/Jardine - Suite Tipo 05 - RF - 01.jpg" as="image">
   <link rel="preload" href="../7. Imagens /Apartamentos /TIPO 6/Jardine - Living Tipo 06 - RF - 01.jpg" as="image">
   <link rel="preload" href="img/manifest.json" as="fetch">
-  <link rel="preload" href="img/apresentacao/01.png" as="image">
+  <link rel="preload" href="https://media.githubusercontent.com/media/DouglasRinckus/jardine-residence/main/site/img/apresentacao/01.png" as="image">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>
     (function() {
       var p = window.location.pathname || '';
       window.__siteBase = (p.lastIndexOf('/') >= 0) ? p.substring(0, p.lastIndexOf('/') + 1) : '/';
+      window.__mediaBase = 'https://media.githubusercontent.com/media/DouglasRinckus/jardine-residence/main/site/';
       window.__manifestReady = fetch(window.__siteBase + 'img/manifest.json').then(function(r) { return r.ok ? r.json() : Promise.reject(); }).then(function(m) { window.__imgManifest = m; return m; }).catch(function() { window.__imgManifest = null; return null; });
     })();
   </script>
@@ -428,6 +429,7 @@
     (function() {
       var pdfPath = '../1. Apresentação Clientes/Capitali - Jardine Residence - 05 - Clientes (1).pdf';
       var base = window.__siteBase || '';
+      var mediaBase = window.__mediaBase || base;
       var galeriaWrap = document.getElementById('livro-galeria-wrap');
       var livroPagina = document.getElementById('livro-pagina');
       var galeriaImg = document.getElementById('apresentacao-galeria-img');
@@ -459,7 +461,7 @@
           var idx = 0;
           function showGaleriaPage(i) {
             idx = Math.max(0, Math.min(i, imgs.length - 1));
-            if (galeriaImg) galeriaImg.src = base + imgs[idx];
+            if (galeriaImg) galeriaImg.src = (imgs[idx].indexOf('img/') === 0 && mediaBase) ? mediaBase + imgs[idx] : base + imgs[idx];
             if (indice) indice.textContent = (idx + 1) + ' / ' + imgs.length;
             if (btnPrev) btnPrev.disabled = idx <= 0;
             if (btnNext) btnNext.disabled = idx >= imgs.length - 1;
@@ -547,10 +549,17 @@
       var indiceAtual = 0;
       var tipoAtual = 'image';
       var base = window.__siteBase || '';
+      var mediaBase = window.__mediaBase || base;
       var imgManifest = window.__imgManifest || null;
       if (!imgManifest && window.__manifestReady) window.__manifestReady.then(function(m) { imgManifest = m || null; });
 
-      function fullUrl(src) { return (src && src.indexOf('http') === 0) ? src : (base + src); }
+      function fullUrl(src) {
+        if (!src) return '';
+        if (src.indexOf('http') === 0) return src;
+        var mb = window.__mediaBase || '';
+        if (mb && src.indexOf('img/') === 0) return mb + src;
+        return base + src;
+      }
       function preloadAdjacent() {
         if (itens[indiceAtual + 1] && itens[indiceAtual + 1].tipo === 'image') { var o = new Image(); o.src = fullUrl(itens[indiceAtual + 1].src); }
         if (itens[indiceAtual - 1] && itens[indiceAtual - 1].tipo === 'image') { var o = new Image(); o.src = fullUrl(itens[indiceAtual - 1].src); }
@@ -661,7 +670,7 @@
             prev.loading = 'lazy';
             fig.insertBefore(prev, embed);
           }
-          prev.src = base + ent.imgs[0];
+          prev.src = (ent.imgs[0].indexOf('img/') === 0 && mediaBase) ? mediaBase + ent.imgs[0] : base + ent.imgs[0];
           prev.style.display = 'block';
           if (embed) embed.style.display = 'none';
         });
