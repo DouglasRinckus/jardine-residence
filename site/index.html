@@ -214,31 +214,31 @@
         <h2 class="secao-titulo">Apartamentos por tipologia</h2>
         <p class="secao-descricao">Clique em qualquer planta para abrir em tela cheia e navegar.</p>
         <div class="plantas-grid" id="galeria-plantas">
-          <figure class="planta-item" role="button" tabindex="0" data-pdf="../2. Plantas apartamentos/LOCALIZAÇÃO PLANTA.pdf">
+          <figure class="planta-item" role="button" tabindex="0" data-pdf="../2. Plantas apartamentos/LOCALIZAÇÃO PLANTA.pdf" data-img-id="localizacao">
             <embed class="planta-pdf" src="../2. Plantas apartamentos/LOCALIZAÇÃO PLANTA.pdf#view=FitH" type="application/pdf" />
             <figcaption>Localização</figcaption>
           </figure>
-          <figure class="planta-item" role="button" tabindex="0" data-pdf="../2. Plantas apartamentos/Tipo 01_MKT_R00.pdf">
+          <figure class="planta-item" role="button" tabindex="0" data-pdf="../2. Plantas apartamentos/Tipo 01_MKT_R00.pdf" data-img-id="tipo-01">
             <embed class="planta-pdf" src="../2. Plantas apartamentos/Tipo 01_MKT_R00.pdf#view=FitH" type="application/pdf" />
             <figcaption>Tipo 01</figcaption>
           </figure>
-          <figure class="planta-item" role="button" tabindex="0" data-pdf="../2. Plantas apartamentos/Tipo 02_MKT_R00.pdf">
+          <figure class="planta-item" role="button" tabindex="0" data-pdf="../2. Plantas apartamentos/Tipo 02_MKT_R00.pdf" data-img-id="tipo-02">
             <embed class="planta-pdf" src="../2. Plantas apartamentos/Tipo 02_MKT_R00.pdf#view=FitH" type="application/pdf" />
             <figcaption>Tipo 02</figcaption>
           </figure>
-          <figure class="planta-item" role="button" tabindex="0" data-pdf="../2. Plantas apartamentos/Tipo 03_MKT_R00.pdf">
+          <figure class="planta-item" role="button" tabindex="0" data-pdf="../2. Plantas apartamentos/Tipo 03_MKT_R00.pdf" data-img-id="tipo-03">
             <embed class="planta-pdf" src="../2. Plantas apartamentos/Tipo 03_MKT_R00.pdf#view=FitH" type="application/pdf" />
             <figcaption>Tipo 03</figcaption>
           </figure>
-          <figure class="planta-item" role="button" tabindex="0" data-pdf="../2. Plantas apartamentos/Tipo 04_MKT_R00.pdf">
+          <figure class="planta-item" role="button" tabindex="0" data-pdf="../2. Plantas apartamentos/Tipo 04_MKT_R00.pdf" data-img-id="tipo-04">
             <embed class="planta-pdf" src="../2. Plantas apartamentos/Tipo 04_MKT_R00.pdf#view=FitH" type="application/pdf" />
             <figcaption>Tipo 04</figcaption>
           </figure>
-          <figure class="planta-item" role="button" tabindex="0" data-pdf="../2. Plantas apartamentos/Tipo 05_MKT_R00.pdf">
+          <figure class="planta-item" role="button" tabindex="0" data-pdf="../2. Plantas apartamentos/Tipo 05_MKT_R00.pdf" data-img-id="tipo-05">
             <embed class="planta-pdf" src="../2. Plantas apartamentos/Tipo 05_MKT_R00.pdf#view=FitH" type="application/pdf" />
             <figcaption>Tipo 05</figcaption>
           </figure>
-          <figure class="planta-item" role="button" tabindex="0" data-pdf="../2. Plantas apartamentos/Tipo 06_MKT_R00.pdf">
+          <figure class="planta-item" role="button" tabindex="0" data-pdf="../2. Plantas apartamentos/Tipo 06_MKT_R00.pdf" data-img-id="tipo-06">
             <embed class="planta-pdf" src="../2. Plantas apartamentos/Tipo 06_MKT_R00.pdf#view=FitH" type="application/pdf" />
             <figcaption>Tipo 06</figcaption>
           </figure>
@@ -266,11 +266,11 @@
         <h2 class="secao-titulo">Áreas de lazer</h2>
         <p class="secao-descricao">Rooftop completo a 100 m de altura, piscinas aquecidas, esportes e convivência — lazer de qualidade, sem lotação. Clique nas plantas para abrir em tela cheia.</p>
         <div class="plantas-grid plantas-lazer" id="galeria-lazer">
-          <figure class="planta-item" role="button" tabindex="0" data-pdf="../3. Plantas lazer/JD_ARQ EXE_AP_Planta Baixa_G5_R31.pdf">
+          <figure class="planta-item" role="button" tabindex="0" data-pdf="../3. Plantas lazer/JD_ARQ EXE_AP_Planta Baixa_G5_R31.pdf" data-img-id="g5">
             <embed class="planta-pdf" src="../3. Plantas lazer/JD_ARQ EXE_AP_Planta Baixa_G5_R31.pdf#view=FitH" type="application/pdf" />
             <figcaption>Planta Baixa G5</figcaption>
           </figure>
-          <figure class="planta-item" role="button" tabindex="0" data-pdf="../3. Plantas lazer/JD_ARQ EXE_AP_Planta Baixa_RFT_R32.pdf">
+          <figure class="planta-item" role="button" tabindex="0" data-pdf="../3. Plantas lazer/JD_ARQ EXE_AP_Planta Baixa_RFT_R32.pdf" data-img-id="rft">
             <embed class="planta-pdf" src="../3. Plantas lazer/JD_ARQ EXE_AP_Planta Baixa_RFT_R32.pdf#view=FitH" type="application/pdf" />
             <figcaption>Planta Baixa RFT</figcaption>
           </figure>
@@ -548,6 +548,8 @@
       var itens = [];
       var indiceAtual = 0;
       var tipoAtual = 'image';
+      var imgManifest = null;
+      fetch('img/manifest.json').then(function(r) { return r.ok ? r.json() : Promise.reject(); }).then(function(m) { imgManifest = m; }).catch(function() {});
 
       function abrirLightbox(lista, idx) {
         itens = lista;
@@ -640,32 +642,68 @@
 
       document.querySelectorAll('#galeria-plantas .planta-item').forEach(function(fig, i) {
         var pdf = fig.getAttribute('data-pdf');
+        var imgId = fig.getAttribute('data-img-id');
         if (!pdf) return;
-        var cap = fig.querySelector('figcaption');
-        var lista = Array.from(document.querySelectorAll('#galeria-plantas .planta-item')).map(function(f) {
-          var p = f.getAttribute('data-pdf');
-          var c = f.querySelector('figcaption');
-          return { tipo: 'pdf', src: p || '', legenda: c ? c.textContent : '' };
+        fig.addEventListener('click', function() {
+          var lista, idx;
+          if (imgManifest && imgId && imgManifest.plantasApartamentos) {
+            var ent = imgManifest.plantasApartamentos.find(function(e) { return e.id === imgId; });
+            if (ent && ent.imgs && ent.imgs.length) {
+              lista = ent.imgs.map(function(src, j) {
+                return { tipo: 'image', src: src, legenda: ent.imgs.length > 1 ? ent.legenda + ' — Pág. ' + (j + 1) : ent.legenda };
+              });
+              idx = 0;
+            }
+          }
+          if (!lista) {
+            lista = Array.from(document.querySelectorAll('#galeria-plantas .planta-item')).map(function(f) {
+              var p = f.getAttribute('data-pdf');
+              var c = f.querySelector('figcaption');
+              return { tipo: 'pdf', src: p || '', legenda: c ? c.textContent : '' };
+            });
+            idx = i;
+          }
+          abrirLightbox(lista, idx);
         });
-        fig.addEventListener('click', function() { abrirLightbox(lista, i); });
-        fig.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); abrirLightbox(lista, i); } });
+        fig.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fig.click(); } });
       });
 
       document.querySelectorAll('#galeria-lazer .planta-item').forEach(function(fig, i) {
         var pdf = fig.getAttribute('data-pdf');
+        var imgId = fig.getAttribute('data-img-id');
         if (!pdf) return;
-        var lista = Array.from(document.querySelectorAll('#galeria-lazer .planta-item')).map(function(f) {
-          var p = f.getAttribute('data-pdf');
-          var c = f.querySelector('figcaption');
-          return { tipo: 'pdf', src: p || '', legenda: c ? c.textContent : '' };
+        fig.addEventListener('click', function() {
+          var lista, idx;
+          if (imgManifest && imgId && imgManifest.plantasLazer) {
+            var ent = imgManifest.plantasLazer.find(function(e) { return e.id === imgId; });
+            if (ent && ent.imgs && ent.imgs.length) {
+              lista = ent.imgs.map(function(src, j) {
+                return { tipo: 'image', src: src, legenda: ent.imgs.length > 1 ? ent.legenda + ' — Pág. ' + (j + 1) : ent.legenda };
+              });
+              idx = 0;
+            }
+          }
+          if (!lista) {
+            lista = Array.from(document.querySelectorAll('#galeria-lazer .planta-item')).map(function(f) {
+              var p = f.getAttribute('data-pdf');
+              var c = f.querySelector('figcaption');
+              return { tipo: 'pdf', src: p || '', legenda: c ? c.textContent : '' };
+            });
+            idx = i;
+          }
+          abrirLightbox(lista, idx);
         });
-        fig.addEventListener('click', function() { abrirLightbox(lista, i); });
-        fig.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); abrirLightbox(lista, i); } });
+        fig.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fig.click(); } });
       });
 
       var pdfApresentacao = '../1. Apresentação Clientes/Capitali - Jardine Residence - 05 - Clientes (1).pdf';
       var abrirApresentacaoTelaCheia = function() {
-        abrirLightbox([{ tipo: 'pdf', src: pdfApresentacao, legenda: 'Apresentação' }], 0);
+        if (imgManifest && imgManifest.apresentacao && imgManifest.apresentacao.length) {
+          var lista = imgManifest.apresentacao.map(function(src) { return { tipo: 'image', src: src, legenda: 'Apresentação' }; });
+          abrirLightbox(lista, 0);
+        } else {
+          abrirLightbox([{ tipo: 'pdf', src: pdfApresentacao, legenda: 'Apresentação' }], 0);
+        }
       };
       var btnApresentacao = document.getElementById('abrir-apresentacao-tela-cheia');
       if (btnApresentacao) btnApresentacao.addEventListener('click', abrirApresentacaoTelaCheia);
