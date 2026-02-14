@@ -20,32 +20,14 @@
   <link rel="preload" href="../7. Imagens /Apartamentos /TIPO 5/Jardine - Living Tipo 05 - RF - 01.jpg" as="image">
   <link rel="preload" href="../7. Imagens /Apartamentos /TIPO 5/Jardine - Suite Tipo 05 - RF - 01.jpg" as="image">
   <link rel="preload" href="../7. Imagens /Apartamentos /TIPO 6/Jardine - Living Tipo 06 - RF - 01.jpg" as="image">
-  <link rel="preload" href="../1. Apresentação Clientes/Capitali - Jardine Residence - 05 - Clientes (1).pdf" as="fetch">
+  <link rel="preload" href="img/manifest.json" as="fetch">
+  <link rel="preload" href="img/apresentacao/01.png" as="image">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>
     (function() {
-      var pdfs = [
-        '../2. Plantas apartamentos/LOCALIZAÇÃO PLANTA.pdf',
-        '../2. Plantas apartamentos/Tipo 01_MKT_R00.pdf',
-        '../2. Plantas apartamentos/Tipo 02_MKT_R00.pdf',
-        '../2. Plantas apartamentos/Tipo 03_MKT_R00.pdf',
-        '../2. Plantas apartamentos/Tipo 04_MKT_R00.pdf',
-        '../2. Plantas apartamentos/Tipo 05_MKT_R00.pdf',
-        '../2. Plantas apartamentos/Tipo 06_MKT_R00.pdf',
-        '../3. Plantas lazer/JD_ARQ EXE_AP_Planta Baixa_G5_R31.pdf',
-        '../3. Plantas lazer/JD_ARQ EXE_AP_Planta Baixa_RFT_R32.pdf'
-      ];
-      function preloadPdfs() {
-        pdfs.forEach(function(url) {
-          var link = document.createElement('link');
-          link.rel = 'preload';
-          link.as = 'fetch';
-          link.href = url;
-          document.head.appendChild(link);
-        });
-      }
-      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', preloadPdfs);
-      else preloadPdfs();
+      var p = window.location.pathname || '';
+      window.__siteBase = (p.lastIndexOf('/') >= 0) ? p.substring(0, p.lastIndexOf('/') + 1) : '/';
+      window.__manifestReady = fetch(window.__siteBase + 'img/manifest.json').then(function(r) { return r.ok ? r.json() : Promise.reject(); }).then(function(m) { window.__imgManifest = m; return m; }).catch(function() { window.__imgManifest = null; return null; });
     })();
   </script>
 </head>
@@ -285,7 +267,10 @@
         <p class="secao-descricao">Passe as páginas na página ou abra em tela cheia.</p>
         <div class="livro-pdf" id="livro-pdf">
           <div class="livro-moldura" id="livro-moldura">
-            <div class="livro-pagina">
+            <div class="livro-galeria-wrap" id="livro-galeria-wrap" style="display:none;">
+              <img id="apresentacao-galeria-img" class="livro-galeria-img" alt="Apresentação" />
+            </div>
+            <div class="livro-pagina" id="livro-pagina">
               <canvas id="pdf-canvas"></canvas>
               <div class="livro-loading" id="pdf-loading">Carregando…</div>
               <div class="livro-erro" id="pdf-erro" style="display:none;">Não foi possível carregar o PDF aqui.</div>
@@ -442,11 +427,10 @@
   <script>
     (function() {
       var pdfPath = '../1. Apresentação Clientes/Capitali - Jardine Residence - 05 - Clientes (1).pdf';
-      var pdfDoc = null;
-      var pageNum = 1;
-      var totalPages = 0;
-      var pageCache = [];
-      var canvas = document.getElementById('pdf-canvas');
+      var base = window.__siteBase || '';
+      var galeriaWrap = document.getElementById('livro-galeria-wrap');
+      var livroPagina = document.getElementById('livro-pagina');
+      var galeriaImg = document.getElementById('apresentacao-galeria-img');
       var loading = document.getElementById('pdf-loading');
       var erro = document.getElementById('pdf-erro');
       var indice = document.getElementById('pdf-indice');
@@ -466,73 +450,88 @@
         if (iframeEl) { iframeEl.src = pdfPath; }
       }
 
-      if (window.location.protocol === 'file:') {
-        showIframeFallback();
-        return;
-      }
-
-      if (typeof pdfjsLib === 'undefined') {
-        showIframeFallback();
-        return;
-      }
-
-      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-
-      function getScaleForPage(page) {
-        var baseViewport = page.getViewport({ scale: 1 });
-        var container = canvas.parentElement;
-        var w = container ? container.clientWidth : window.innerWidth;
-        var scale = w / baseViewport.width;
-        return Math.min(2, Math.max(0.5, scale));
-      }
-
-      function renderPage(num) {
-        if (!pdfDoc) return;
-        pageNum = Math.max(1, Math.min(num, totalPages));
-        var page = pageCache[pageNum - 1];
-        if (page) {
-          var scale = getScaleForPage(page);
-          var viewport = page.getViewport({ scale: scale });
-          canvas.height = viewport.height;
-          canvas.width = viewport.width;
-          page.render({ canvasContext: canvas.getContext('2d'), viewport: viewport });
-          indice.textContent = 'Página ' + pageNum + ' de ' + totalPages;
-          if (btnPrev) btnPrev.disabled = pageNum <= 1;
-          if (btnNext) btnNext.disabled = pageNum >= totalPages;
+      (window.__manifestReady || Promise.resolve(null)).then(function(m) {
+        if (m && m.apresentacao && m.apresentacao.length) {
+          if (loading) loading.style.display = 'none';
+          if (galeriaWrap) galeriaWrap.style.display = 'block';
+          if (livroPagina) livroPagina.style.display = 'none';
+          var imgs = m.apresentacao;
+          var idx = 0;
+          function showGaleriaPage(i) {
+            idx = Math.max(0, Math.min(i, imgs.length - 1));
+            if (galeriaImg) galeriaImg.src = base + imgs[idx];
+            if (indice) indice.textContent = (idx + 1) + ' / ' + imgs.length;
+            if (btnPrev) btnPrev.disabled = idx <= 0;
+            if (btnNext) btnNext.disabled = idx >= imgs.length - 1;
+          }
+          showGaleriaPage(0);
+          if (btnPrev) btnPrev.addEventListener('click', function() { showGaleriaPage(idx - 1); });
+          if (btnNext) btnNext.addEventListener('click', function() { showGaleriaPage(idx + 1); });
           return;
         }
-        pdfDoc.getPage(pageNum).then(function(p) {
-          var scale = getScaleForPage(p);
-          var viewport = p.getViewport({ scale: scale });
-          canvas.height = viewport.height;
-          canvas.width = viewport.width;
-          p.render({ canvasContext: canvas.getContext('2d'), viewport: viewport });
-          indice.textContent = 'Página ' + pageNum + ' de ' + totalPages;
-          if (btnPrev) btnPrev.disabled = pageNum <= 1;
-          if (btnNext) btnNext.disabled = pageNum >= totalPages;
+        initPdf();
+      }).catch(function() { initPdf(); });
+
+      function initPdf() {
+        if (window.location.protocol === 'file:') { showIframeFallback(); return; }
+        if (typeof pdfjsLib === 'undefined') { showIframeFallback(); return; }
+        var pdfDoc = null, pageNum = 1, totalPages = 0, pageCache = [];
+        var canvas = document.getElementById('pdf-canvas');
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        function getScaleForPage(page) {
+          var baseViewport = page.getViewport({ scale: 1 });
+          var container = canvas.parentElement;
+          var w = container ? container.clientWidth : window.innerWidth;
+          var scale = w / baseViewport.width;
+          return Math.min(2, Math.max(0.5, scale));
+        }
+        function renderPage(num) {
+          if (!pdfDoc) return;
+          pageNum = Math.max(1, Math.min(num, totalPages));
+          var page = pageCache[pageNum - 1];
+          if (page) {
+            var scale = getScaleForPage(page);
+            var viewport = page.getViewport({ scale: scale });
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            page.render({ canvasContext: canvas.getContext('2d'), viewport: viewport });
+            indice.textContent = 'Página ' + pageNum + ' de ' + totalPages;
+            if (btnPrev) btnPrev.disabled = pageNum <= 1;
+            if (btnNext) btnNext.disabled = pageNum >= totalPages;
+            return;
+          }
+          pdfDoc.getPage(pageNum).then(function(p) {
+            var scale = getScaleForPage(p);
+            var viewport = p.getViewport({ scale: scale });
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            p.render({ canvasContext: canvas.getContext('2d'), viewport: viewport });
+            indice.textContent = 'Página ' + pageNum + ' de ' + totalPages;
+            if (btnPrev) btnPrev.disabled = pageNum <= 1;
+            if (btnNext) btnNext.disabled = pageNum >= totalPages;
+          });
+        }
+
+        pdfjsLib.getDocument(pdfPath).promise.then(function(pdf) {
+          pdfDoc = pdf;
+          totalPages = pdf.numPages;
+          if (loading) loading.style.display = 'none';
+          var loadFirst = pdf.getPage(1).then(function(p) { pageCache[0] = p; return p; });
+          loadFirst.then(function() { renderPage(1); });
+          for (var p = 2; p <= totalPages; p++) {
+            (function(idx) {
+              pdf.getPage(idx).then(function(page) { pageCache[idx - 1] = page; }).catch(function() {});
+            })(p);
+          }
+        }).catch(function() {
+          showIframeFallback();
+        });
+        if (btnPrev) btnPrev.addEventListener('click', function() { renderPage(pageNum - 1); });
+        if (btnNext) btnNext.addEventListener('click', function() { renderPage(pageNum + 1); });
+        window.addEventListener('resize', function() {
+          if (pdfDoc && pageNum >= 1) renderPage(pageNum);
         });
       }
-
-      pdfjsLib.getDocument(pdfPath).promise.then(function(pdf) {
-        pdfDoc = pdf;
-        totalPages = pdf.numPages;
-        if (loading) loading.style.display = 'none';
-        var loadFirst = pdf.getPage(1).then(function(p) { pageCache[0] = p; return p; });
-        loadFirst.then(function() { renderPage(1); });
-        for (var p = 2; p <= totalPages; p++) {
-          (function(idx) {
-            pdf.getPage(idx).then(function(page) { pageCache[idx - 1] = page; }).catch(function() {});
-          })(p);
-        }
-      }).catch(function() {
-        showIframeFallback();
-      });
-
-      if (btnPrev) btnPrev.addEventListener('click', function() { renderPage(pageNum - 1); });
-      if (btnNext) btnNext.addEventListener('click', function() { renderPage(pageNum + 1); });
-      window.addEventListener('resize', function() {
-        if (pdfDoc && pageNum >= 1) renderPage(pageNum);
-      });
     })();
 
     (function() {
@@ -548,8 +547,15 @@
       var itens = [];
       var indiceAtual = 0;
       var tipoAtual = 'image';
-      var imgManifest = null;
-      fetch('img/manifest.json').then(function(r) { return r.ok ? r.json() : Promise.reject(); }).then(function(m) { imgManifest = m; }).catch(function() {});
+      var base = window.__siteBase || '';
+      var imgManifest = window.__imgManifest || null;
+      if (!imgManifest && window.__manifestReady) window.__manifestReady.then(function(m) { imgManifest = m || null; });
+
+      function fullUrl(src) { return (src && src.indexOf('http') === 0) ? src : (base + src); }
+      function preloadAdjacent() {
+        if (itens[indiceAtual + 1] && itens[indiceAtual + 1].tipo === 'image') { var o = new Image(); o.src = fullUrl(itens[indiceAtual + 1].src); }
+        if (itens[indiceAtual - 1] && itens[indiceAtual - 1].tipo === 'image') { var o = new Image(); o.src = fullUrl(itens[indiceAtual - 1].src); }
+      }
 
       function abrirLightbox(lista, idx) {
         itens = lista;
@@ -582,9 +588,10 @@
           imgEl.style.opacity = '0';
           imgEl.alt = item.legenda || '';
           imgEl.style.display = 'block';
-          imgEl.onload = function() { imgEl.style.opacity = '1'; };
-          imgEl.src = item.src;
-          if (imgEl.complete) imgEl.style.opacity = '1';
+          var url = fullUrl(item.src);
+          imgEl.onload = function() { imgEl.style.opacity = '1'; preloadAdjacent(); };
+          imgEl.src = url;
+          if (imgEl.complete) { imgEl.style.opacity = '1'; preloadAdjacent(); }
         } else {
           iframeEl.style.display = 'block';
           if (window.innerWidth <= 768 && item.src.indexOf('#') === -1) {
@@ -640,14 +647,38 @@
         fig.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); abrirLightbox(lista, i); } });
       });
 
+      function applyPlantPreviews(m) {
+        if (!m) return;
+        [].forEach.call(document.querySelectorAll('#galeria-plantas .planta-item, #galeria-lazer .planta-item'), function(fig) {
+          var imgId = fig.getAttribute('data-img-id');
+          var ent = (m.plantasApartamentos || []).find(function(e) { return e.id === imgId; }) || (m.plantasLazer || []).find(function(e) { return e.id === imgId; });
+          if (!ent || !ent.imgs || !ent.imgs.length) return;
+          var embed = fig.querySelector('.planta-pdf');
+          var prev = fig.querySelector('.planta-img-preview');
+          if (!prev) {
+            prev = document.createElement('img');
+            prev.className = 'planta-img-preview';
+            prev.alt = ent.legenda || '';
+            prev.loading = 'lazy';
+            fig.insertBefore(prev, embed);
+          }
+          prev.src = base + ent.imgs[0];
+          prev.style.display = 'block';
+          if (embed) embed.style.display = 'none';
+        });
+      }
+      (window.__manifestReady || Promise.resolve(null)).then(function(m) { imgManifest = m || imgManifest; applyPlantPreviews(imgManifest); });
+
       document.querySelectorAll('#galeria-plantas .planta-item').forEach(function(fig, i) {
         var pdf = fig.getAttribute('data-pdf');
         var imgId = fig.getAttribute('data-img-id');
         if (!pdf) return;
         fig.addEventListener('click', function() {
           var lista, idx;
-          if (imgManifest && imgId && imgManifest.plantasApartamentos) {
-            var ent = imgManifest.plantasApartamentos.find(function(e) { return e.id === imgId; });
+          (window.__manifestReady || Promise.resolve(imgManifest)).then(function(m) {
+          m = m || imgManifest;
+          if (m && imgId && m.plantasApartamentos) {
+            var ent = m.plantasApartamentos.find(function(e) { return e.id === imgId; });
             if (ent && ent.imgs && ent.imgs.length) {
               lista = ent.imgs.map(function(src, j) {
                 return { tipo: 'image', src: src, legenda: ent.imgs.length > 1 ? ent.legenda + ' — Pág. ' + (j + 1) : ent.legenda };
@@ -664,6 +695,7 @@
             idx = i;
           }
           abrirLightbox(lista, idx);
+          });
         });
         fig.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fig.click(); } });
       });
@@ -674,8 +706,10 @@
         if (!pdf) return;
         fig.addEventListener('click', function() {
           var lista, idx;
-          if (imgManifest && imgId && imgManifest.plantasLazer) {
-            var ent = imgManifest.plantasLazer.find(function(e) { return e.id === imgId; });
+          (window.__manifestReady || Promise.resolve(imgManifest)).then(function(m) {
+          m = m || imgManifest;
+          if (m && imgId && m.plantasLazer) {
+            var ent = m.plantasLazer.find(function(e) { return e.id === imgId; });
             if (ent && ent.imgs && ent.imgs.length) {
               lista = ent.imgs.map(function(src, j) {
                 return { tipo: 'image', src: src, legenda: ent.imgs.length > 1 ? ent.legenda + ' — Pág. ' + (j + 1) : ent.legenda };
@@ -692,18 +726,22 @@
             idx = i;
           }
           abrirLightbox(lista, idx);
+          });
         });
         fig.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fig.click(); } });
       });
 
       var pdfApresentacao = '../1. Apresentação Clientes/Capitali - Jardine Residence - 05 - Clientes (1).pdf';
       var abrirApresentacaoTelaCheia = function() {
-        if (imgManifest && imgManifest.apresentacao && imgManifest.apresentacao.length) {
-          var lista = imgManifest.apresentacao.map(function(src) { return { tipo: 'image', src: src, legenda: 'Apresentação' }; });
-          abrirLightbox(lista, 0);
-        } else {
-          abrirLightbox([{ tipo: 'pdf', src: pdfApresentacao, legenda: 'Apresentação' }], 0);
-        }
+        (window.__manifestReady || Promise.resolve(imgManifest)).then(function(m) {
+          m = m || imgManifest;
+          if (m && m.apresentacao && m.apresentacao.length) {
+            var lista = m.apresentacao.map(function(src) { return { tipo: 'image', src: src, legenda: 'Apresentação' }; });
+            abrirLightbox(lista, 0);
+          } else {
+            abrirLightbox([{ tipo: 'pdf', src: pdfApresentacao, legenda: 'Apresentação' }], 0);
+          }
+        });
       };
       var btnApresentacao = document.getElementById('abrir-apresentacao-tela-cheia');
       if (btnApresentacao) btnApresentacao.addEventListener('click', abrirApresentacaoTelaCheia);
