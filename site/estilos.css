@@ -868,9 +868,26 @@ body {
 }
 
 @media (max-width: 768px) {
+  .lightbox {
+    padding: max(0.5rem, var(--safe-top)) 0 max(3rem, calc(0.75rem + var(--safe-bottom))) 0;
+    padding-left: max(0.5rem, var(--safe-left));
+    padding-right: max(0.5rem, var(--safe-right));
+  }
   .lightbox-conteudo {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    max-width: none;
     align-items: stretch;
     justify-content: stretch;
+  }
+  .lightbox-img {
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    object-fit: contain;
+    flex: 1;
+    align-self: stretch;
   }
   .lightbox-iframe {
     width: 100%;
@@ -879,6 +896,12 @@ body {
     flex: 1;
     align-self: stretch;
     border-radius: 0;
+  }
+  .lightbox-info {
+    position: static;
+    flex-shrink: 0;
+    padding: 0.5rem 0;
+    transform: none;
   }
 }
 
@@ -1508,42 +1531,54 @@ body {
   }
 
   .lightbox {
-    padding: max(1rem, var(--safe-top)) 1rem max(4rem, calc(1rem + var(--safe-bottom)));
-    padding-left: max(1rem, var(--safe-left));
-    padding-right: max(1rem, var(--safe-right));
+    padding: max(0.25rem, var(--safe-top)) 0 max(2.75rem, calc(0.5rem + var(--safe-bottom))) 0;
+    padding-left: max(0.25rem, var(--safe-left));
+    padding-right: max(0.25rem, var(--safe-right));
   }
 
   .lightbox-fechar,
   .lightbox-prev,
   .lightbox-next {
-    width: 52px;
-    height: 52px;
-    min-width: 52px;
-    min-height: 52px;
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
   }
 
   .lightbox-prev {
-    left: max(0.5rem, var(--safe-left));
+    left: max(0.25rem, var(--safe-left));
   }
 
   .lightbox-next {
-    right: max(0.5rem, var(--safe-right));
+    right: max(0.25rem, var(--safe-right));
   }
 
   .lightbox-fechar {
-    top: max(1rem, var(--safe-top));
-    right: max(1rem, var(--safe-right));
+    top: max(0.5rem, var(--safe-top));
+    right: max(0.5rem, var(--safe-right));
   }
 
   .lightbox-img {
-    max-height: calc(100vh - 160px);
-    max-height: calc(100dvh - 160px);
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    object-fit: contain;
   }
 
   .lightbox-iframe {
+    width: 100%;
+    height: 100%;
     min-height: 0;
-    height: calc(100vh - 120px);
-    height: calc(100dvh - 120px);
+  }
+
+  .lightbox-info {
+    position: static;
+    padding: 0.35rem 0 max(0.35rem, var(--safe-bottom));
+  }
+
+  .lightbox-contador,
+  .lightbox-legenda {
+    font-size: 0.8rem;
   }
 
   .destaques-grid {
