@@ -867,6 +867,31 @@ body {
   border-radius: 4px;
 }
 
+.lightbox-pdf {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  background: #fff;
+  position: relative;
+}
+
+.lightbox-pdf-canvas {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.lightbox-pdf-loading {
+  position: absolute;
+  color: #333;
+  font-size: 1rem;
+}
+
 @media (max-width: 768px) {
   .lightbox {
     padding: max(0.5rem, var(--safe-top)) 0 max(3rem, calc(0.75rem + var(--safe-bottom))) 0;
