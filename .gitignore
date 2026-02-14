@@ -16,7 +16,6 @@ npm-debug.log*
 .env
 .env.local
 
-# Vídeos (GitHub limita 100 MB por arquivo)
-*.mp4
+# Vídeos pesados sem LFS (*.mp4 é rastreado via Git LFS em .gitattributes)
 *.mov
 *.avi
