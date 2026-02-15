@@ -20,8 +20,11 @@
   <link rel="preload" href="../7. Imagens /Apartamentos /TIPO 5/Jardine - Living Tipo 05 - RF - 01.jpg" as="image">
   <link rel="preload" href="../7. Imagens /Apartamentos /TIPO 5/Jardine - Suite Tipo 05 - RF - 01.jpg" as="image">
   <link rel="preload" href="../7. Imagens /Apartamentos /TIPO 6/Jardine - Living Tipo 06 - RF - 01.jpg" as="image">
+  <link rel="preconnect" href="https://media.githubusercontent.com" crossorigin>
   <link rel="preload" href="img/manifest.json" as="fetch">
   <link rel="preload" href="https://media.githubusercontent.com/media/DouglasRinckus/jardine-residence/main/site/img/apresentacao/01.png" as="image">
+  <link rel="preload" href="https://media.githubusercontent.com/media/DouglasRinckus/jardine-residence/main/site/img/apresentacao/02.png" as="image">
+  <link rel="preload" href="https://media.githubusercontent.com/media/DouglasRinckus/jardine-residence/main/site/img/apresentacao/03.png" as="image">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>
     (function() {
@@ -29,6 +32,14 @@
       window.__siteBase = (p.lastIndexOf('/') >= 0) ? p.substring(0, p.lastIndexOf('/') + 1) : '/';
       window.__mediaBase = 'https://media.githubusercontent.com/media/DouglasRinckus/jardine-residence/main/site/';
       window.__manifestReady = fetch(window.__siteBase + 'img/manifest.json').then(function(r) { return r.ok ? r.json() : Promise.reject(); }).then(function(m) { window.__imgManifest = m; return m; }).catch(function() { window.__imgManifest = null; return null; });
+      window.__manifestReady.then(function(m) {
+        if (!m || !m.apresentacao || !m.apresentacao.length) return;
+        var base = window.__mediaBase || '';
+        m.apresentacao.forEach(function(path) {
+          var img = new Image();
+          img.src = path.indexOf('img/') === 0 ? base + path : path;
+        });
+      });
     })();
   </script>
 </head>
@@ -269,7 +280,7 @@
         <div class="livro-pdf" id="livro-pdf">
           <div class="livro-moldura" id="livro-moldura">
             <div class="livro-galeria-wrap" id="livro-galeria-wrap" style="display:none;">
-              <img id="apresentacao-galeria-img" class="livro-galeria-img" alt="Apresentação" />
+              <img id="apresentacao-galeria-img" class="livro-galeria-img" alt="Apresentação" fetchpriority="high" decoding="async" />
             </div>
             <div class="livro-pagina" id="livro-pagina">
               <canvas id="pdf-canvas"></canvas>
