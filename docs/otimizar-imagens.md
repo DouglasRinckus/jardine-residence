@@ -1,6 +1,75 @@
 # Reduzir tamanho das imagens sem perder qualidade
 
-As imagens da apresentação e das plantas (PNG em 300 DPI) podem ficar pesadas. Abaixo, opções que **reduzem o tamanho mantendo qualidade visual** (ou muito próxima).
+As imagens da apresentação e das plantas (PNG em 300 DPI) podem ficar pesadas. Abaixo, o **fluxo que usamos com os scripts do projeto** e outras opções.
+
+---
+
+## Como reduzir as imagens (fluxo que usamos)
+
+Este é o processo que usamos para deixar os PNGs menores: **redimensionar** (limite em MB) e depois **otimizar** com Oxipng. Os scripts estão em `scripts/`.
+
+### Pré-requisitos
+
+- **macOS** (os scripts usam `sips` e `stat -f%z`).
+- **Oxipng** (para otimizar): `brew install oxipng`
+- Se os PNGs estiverem em **Git LFS** e no disco estiverem só os “pointers”, baixe os arquivos reais antes:
+  ```bash
+  git lfs pull
+  ```
+
+### Passo 1: Redimensionar (limite por arquivo, ex.: 10 MB ou 5 MB)
+
+Reduz a **resolução** dos PNGs que passam do limite (menos pixels = arquivo menor). Quem já está abaixo do limite não é alterado.
+
+```bash
+# Limite de 10 MB (padrão) — recomendado
+./scripts/redimensionar-png-max-mb.sh
+
+# Limite de 5 MB (arquivos ainda menores)
+TARGET_MB=5 ./scripts/redimensionar-png-max-mb.sh
+```
+
+- O script mostra **quantos arquivos foram processados** e quantos foram redimensionados.
+- No final sugere rodar o script de otimização (Oxipng).
+
+### Passo 2: Otimizar PNG (compressão sem perda)
+
+Depois de redimensionar (ou sempre que quiser só “apertar” o PNG sem mudar pixels):
+
+```bash
+./scripts/otimizar-png-oxipng.sh
+```
+
+- Usa **nível 2** e **4 arquivos em paralelo** (rápido).
+- Para compressão máxima (mais lento): `OXIPNG_LEVEL=6 ./scripts/otimizar-png-oxipng.sh`
+- Mostra progresso `[ n/total ]` e no final: quantos otimizados e quantos ignorados (ex.: LFS pointer).
+
+### Passo 3: Subir as alterações
+
+```bash
+git add site/img/
+git add scripts/redimensionar-png-max-mb.sh   # se tiver alterado/adicionado
+git commit -m "Redimensionar/otimizar PNGs (máx. 10 MB)"
+git push origin main
+```
+
+Se usar LFS, o `git push` envia os novos binários para o LFS.
+
+### Resumo do fluxo
+
+1. `git lfs pull` (se precisar dos PNGs reais)
+2. `./scripts/redimensionar-png-max-mb.sh` (ou com `TARGET_MB=5` se quiser menor)
+3. `./scripts/otimizar-png-oxipng.sh`
+4. `git add` → `git commit` → `git push`
+
+Assim você pode repetir o processo no futuro sempre que quiser reduzir de novo as imagens.
+
+### Scripts e opções (referência)
+
+| Script | Função | Variáveis de ambiente |
+|--------|--------|------------------------|
+| `scripts/redimensionar-png-max-mb.sh` | Reduz resolução até cada PNG ficar ≤ N MB | `TARGET_MB=10` (ou 5, etc.) |
+| `scripts/otimizar-png-oxipng.sh` | Comprime PNG sem perda (Oxipng) | `OXIPNG_LEVEL=2`, `OXIPNG_JOBS=4` |
 
 ---
 

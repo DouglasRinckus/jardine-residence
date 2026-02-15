@@ -573,6 +573,21 @@
           img.src = fullUrl(src);
         });
       }
+      function preloadAllPlantas(m) {
+        if (!m) return;
+        (m.plantasApartamentos || []).forEach(function(ent) {
+          (ent.imgs || []).forEach(function(src) {
+            var img = new Image();
+            img.src = fullUrl(src);
+          });
+        });
+        (m.plantasLazer || []).forEach(function(ent) {
+          (ent.imgs || []).forEach(function(src) {
+            var img = new Image();
+            img.src = fullUrl(src);
+          });
+        });
+      }
 
       function abrirLightbox(lista, idx) {
         itens = lista;
@@ -705,6 +720,7 @@
         imgManifest = m || imgManifest;
         applyPlantPreviews(imgManifest);
         preloadAllApresentacao();
+        preloadAllPlantas(imgManifest);
       });
 
       function buildGaleriaPlantas(m) {
