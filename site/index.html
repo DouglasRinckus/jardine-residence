@@ -707,65 +707,63 @@
         preloadAllApresentacao();
       });
 
-      document.querySelectorAll('#galeria-plantas .planta-item').forEach(function(fig, i) {
-        var pdf = fig.getAttribute('data-pdf');
-        var imgId = fig.getAttribute('data-img-id');
-        if (!pdf) return;
-        fig.addEventListener('click', function() {
-          var lista, idx;
-          (window.__manifestReady || Promise.resolve(imgManifest)).then(function(m) {
+      function buildGaleriaPlantas(m) {
+        if (!m) return { lista: [], indexForId: {} };
+        var lista = [];
+        var indexForId = {};
+        (m.plantasApartamentos || []).forEach(function(ent) {
+          var start = lista.length;
+          indexForId[ent.id] = start;
+          (ent.imgs || []).forEach(function(src, j) {
+            lista.push({ tipo: 'image', src: src, legenda: (ent.imgs.length > 1 ? ent.legenda + ' — Pág. ' + (j + 1) : ent.legenda) });
+          });
+        });
+        (m.plantasLazer || []).forEach(function(ent) {
+          var start = lista.length;
+          indexForId[ent.id] = start;
+          (ent.imgs || []).forEach(function(src, j) {
+            lista.push({ tipo: 'image', src: src, legenda: (ent.imgs.length > 1 ? ent.legenda + ' — Pág. ' + (j + 1) : ent.legenda) });
+          });
+        });
+        return { lista: lista, indexForId: indexForId };
+      }
+
+      function openPlantasLightbox(imgId) {
+        (window.__manifestReady || Promise.resolve(imgManifest)).then(function(m) {
           m = m || imgManifest;
-          if (m && imgId && m.plantasApartamentos) {
-            var ent = m.plantasApartamentos.find(function(e) { return e.id === imgId; });
-            if (ent && ent.imgs && ent.imgs.length) {
-              lista = ent.imgs.map(function(src, j) {
-                return { tipo: 'image', src: src, legenda: ent.imgs.length > 1 ? ent.legenda + ' — Pág. ' + (j + 1) : ent.legenda };
-              });
-              idx = 0;
-            }
-          }
-          if (!lista) {
-            lista = Array.from(document.querySelectorAll('#galeria-plantas .planta-item')).map(function(f) {
+          var gal = buildGaleriaPlantas(m);
+          if (gal.lista.length) {
+            var idx = gal.indexForId[imgId];
+            if (idx === undefined) idx = 0;
+            abrirLightbox(gal.lista, idx);
+          } else {
+            var figs = document.querySelectorAll('#galeria-plantas .planta-item, #galeria-lazer .planta-item');
+            var fig = document.querySelector('.planta-item[data-img-id="' + imgId + '"]');
+            var i = fig ? [].indexOf.call(figs, fig) : 0;
+            if (i < 0) i = 0;
+            var lista = Array.from(figs).map(function(f) {
               var p = f.getAttribute('data-pdf');
               var c = f.querySelector('figcaption');
               return { tipo: 'pdf', src: p || '', legenda: c ? c.textContent : '' };
             });
-            idx = i;
+            abrirLightbox(lista, i);
           }
-          abrirLightbox(lista, idx);
-          });
         });
+      }
+
+      document.querySelectorAll('#galeria-plantas .planta-item').forEach(function(fig) {
+        var pdf = fig.getAttribute('data-pdf');
+        var imgId = fig.getAttribute('data-img-id');
+        if (!pdf) return;
+        fig.addEventListener('click', function() { openPlantasLightbox(imgId); });
         fig.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fig.click(); } });
       });
 
-      document.querySelectorAll('#galeria-lazer .planta-item').forEach(function(fig, i) {
+      document.querySelectorAll('#galeria-lazer .planta-item').forEach(function(fig) {
         var pdf = fig.getAttribute('data-pdf');
         var imgId = fig.getAttribute('data-img-id');
         if (!pdf) return;
-        fig.addEventListener('click', function() {
-          var lista, idx;
-          (window.__manifestReady || Promise.resolve(imgManifest)).then(function(m) {
-          m = m || imgManifest;
-          if (m && imgId && m.plantasLazer) {
-            var ent = m.plantasLazer.find(function(e) { return e.id === imgId; });
-            if (ent && ent.imgs && ent.imgs.length) {
-              lista = ent.imgs.map(function(src, j) {
-                return { tipo: 'image', src: src, legenda: ent.imgs.length > 1 ? ent.legenda + ' — Pág. ' + (j + 1) : ent.legenda };
-              });
-              idx = 0;
-            }
-          }
-          if (!lista) {
-            lista = Array.from(document.querySelectorAll('#galeria-lazer .planta-item')).map(function(f) {
-              var p = f.getAttribute('data-pdf');
-              var c = f.querySelector('figcaption');
-              return { tipo: 'pdf', src: p || '', legenda: c ? c.textContent : '' };
-            });
-            idx = i;
-          }
-          abrirLightbox(lista, idx);
-          });
-        });
+        fig.addEventListener('click', function() { openPlantasLightbox(imgId); });
         fig.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fig.click(); } });
       });
 
