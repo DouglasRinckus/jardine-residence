@@ -1,0 +1,108 @@
+{
+  "apresentacao": [
+    "img/apresentacao/01.png",
+    "img/apresentacao/02.png",
+    "img/apresentacao/03.png",
+    "img/apresentacao/04.png",
+    "img/apresentacao/05.png",
+    "img/apresentacao/06.png",
+    "img/apresentacao/07.png",
+    "img/apresentacao/08.png",
+    "img/apresentacao/09.png",
+    "img/apresentacao/10.png",
+    "img/apresentacao/11.png",
+    "img/apresentacao/12.png",
+    "img/apresentacao/13.png",
+    "img/apresentacao/14.png",
+    "img/apresentacao/15.png",
+    "img/apresentacao/16.png",
+    "img/apresentacao/17.png",
+    "img/apresentacao/18.png",
+    "img/apresentacao/19.png",
+    "img/apresentacao/20.png",
+    "img/apresentacao/21.png",
+    "img/apresentacao/22.png",
+    "img/apresentacao/23.png",
+    "img/apresentacao/24.png",
+    "img/apresentacao/25.png",
+    "img/apresentacao/26.png",
+    "img/apresentacao/27.png",
+    "img/apresentacao/28.png",
+    "img/apresentacao/29.png",
+    "img/apresentacao/30.png",
+    "img/apresentacao/31.png",
+    "img/apresentacao/32.png",
+    "img/apresentacao/33.png",
+    "img/apresentacao/34.png",
+    "img/apresentacao/35.png",
+    "img/apresentacao/36.png",
+    "img/apresentacao/37.png"
+  ],
+  "plantasApartamentos": [
+    {
+      "id": "localizacao",
+      "legenda": "Localização",
+      "imgs": [
+        "img/plantas-apartamentos/localizacao/01.png"
+      ]
+    },
+    {
+      "id": "tipo-01",
+      "legenda": "Tipo 01",
+      "imgs": [
+        "img/plantas-apartamentos/tipo-01/01.png"
+      ]
+    },
+    {
+      "id": "tipo-02",
+      "legenda": "Tipo 02",
+      "imgs": [
+        "img/plantas-apartamentos/tipo-02/01.png"
+      ]
+    },
+    {
+      "id": "tipo-03",
+      "legenda": "Tipo 03",
+      "imgs": [
+        "img/plantas-apartamentos/tipo-03/01.png"
+      ]
+    },
+    {
+      "id": "tipo-04",
+      "legenda": "Tipo 04",
+      "imgs": [
+        "img/plantas-apartamentos/tipo-04/01.png"
+      ]
+    },
+    {
+      "id": "tipo-05",
+      "legenda": "Tipo 05",
+      "imgs": [
+        "img/plantas-apartamentos/tipo-05/01.png"
+      ]
+    },
+    {
+      "id": "tipo-06",
+      "legenda": "Tipo 06",
+      "imgs": [
+        "img/plantas-apartamentos/tipo-06/01.png"
+      ]
+    }
+  ],
+  "plantasLazer": [
+    {
+      "id": "g5",
+      "legenda": "Planta Baixa G5",
+      "imgs": [
+        "img/plantas-lazer/g5/01.png"
+      ]
+    },
+    {
+      "id": "rft",
+      "legenda": "Planta Baixa RFT",
+      "imgs": [
+        "img/plantas-lazer/rft/01.png"
+      ]
+    }
+  ]
+}

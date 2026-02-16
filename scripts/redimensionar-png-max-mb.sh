@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Redimensiona PNGs em site/img para ficarem no máximo TARGET_MB (ex.: 5 ou 10).
+# Redimensiona PNGs em jardine/img para ficarem no máximo TARGET_MB (ex.: 5 ou 10).
 # Arquivos já menores que o limite não são alterados.
 # Usa sips (nativo do macOS). Reduz resolução, depois otimiza com oxipng se disponível.
 #
@@ -10,7 +10,7 @@
 # Se os PNGs forem pointers do Git LFS, baixe antes: git lfs pull
 set -e
 BASE="$(cd "$(dirname "$0")/.." && pwd)"
-IMG="$BASE/site/img"
+IMG="$BASE/jardine/img"
 TARGET_MB="${TARGET_MB:-10}"
 TARGET_BYTES=$((TARGET_MB * 1024 * 1024))
 

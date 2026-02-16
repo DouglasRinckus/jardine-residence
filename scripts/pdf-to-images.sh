@@ -5,7 +5,7 @@
 # Requer: pdftoppm (brew install poppler)
 set -e
 BASE="$(cd "$(dirname "$0")/.." && pwd)"
-SITE="$BASE/site"
+SITE="$BASE/jardine"
 IMG="$SITE/img"
 R="${PDF_DPI:-300}"
 echo "Convertendo com ${R} DPI..."

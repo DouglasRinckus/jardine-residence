@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 /**
- * Gera site/img/manifest.json a partir das pastas em site/img/
+ * Gera jardine/img/manifest.json a partir das pastas em jardine/img/
  * Rodar após pdf-to-images.sh
  */
 const fs = require('fs');
 const path = require('path');
 
-const siteDir = path.join(__dirname, '..', 'site');
+const siteDir = path.join(__dirname, '..', 'jardine');
 const imgDir = path.join(siteDir, 'img');
 
 function listPngs(dir) {

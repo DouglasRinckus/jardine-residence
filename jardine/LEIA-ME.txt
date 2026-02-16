@@ -1,0 +1,28 @@
+JARDINE RESIDENCE — SITE DE APRESENTAÇÃO PARA CLIENTES
+======================================================
+
+Este site é uma apresentação do empreendimento para clientes: PDF em formato de livro (folhear páginas), plantas em PDF exibidas como fotos na página, vídeo, galeria e forma de pagamento com exemplo de uma unidade de cada tipo.
+
+COMO ABRIR
+----------
+1. Abra o arquivo index.html no navegador (Chrome, Safari, Edge, Firefox).
+2. Duplo clique em index.html ou arraste-o para a janela do navegador.
+3. Ou: clique com o botão direito em index.html → Abrir com → [seu navegador].
+
+IMPORTANTE
+----------
+O site deve ficar DENTRO da pasta "Empreendimento Jardini", na subpasta "site".
+Os links para PDFs, imagens e vídeo usam caminhos relativos (../1. Apresentação Clientes/..., etc.).
+Não mova a pasta "site" para outro lugar sem ajustar os caminhos ou copiar as pastas 1 a 7 junto.
+
+O QUE ESTÁ INCLUÍDO
+-------------------
+- Apresentação: PDF como livro (botões Anterior/Próxima para passar páginas)
+- Plantas dos apartamentos: exibidas como fotos na página (Localização + Tipos 01 a 06)
+- Plantas de lazer: 2 plantas em destaque na página
+- Vídeo das alturas (player na página)
+- Pitch de vendas (link para PDF)
+- Forma de pagamento: tabela com uma unidade de cada tipologia (Tipo 01 a 06) — preencha com dados das tabelas em PDF
+- Galeria de imagens (fachada e apartamentos)
+
+O cálculo de permuta (VGV) NÃO está neste site; ele fica apenas no documento da pasta "permuta-unidades".

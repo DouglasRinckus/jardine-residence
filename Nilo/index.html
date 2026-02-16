@@ -5,10 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#0f172a">
   <title>Nilo — Empreendimento</title>
+  <!-- Preview ao compartilhar link (WhatsApp, redes sociais) — use o mesmo domínio que está em CNAME -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:title" content="Nilo Residence — Empreendimento">
+  <meta property="og:description" content="Conheça o Nilo Residence. Plantas, lazer, localização e condições. Fale com a consultora e agende sua visita.">
+  <meta property="og:url" content="https://imoveis.silvanaduarteimoveis.com.br/Nilo/">
+  <meta property="og:image" content="https://imoveis.silvanaduarteimoveis.com.br/Nilo/Predio/01.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="Nilo Residence">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Nilo Residence — Empreendimento">
+  <meta name="twitter:description" content="Conheça o Nilo Residence. Plantas, lazer e condições em Itapema/SC.">
+  <meta name="twitter:image" content="https://imoveis.silvanaduarteimoveis.com.br/Nilo/Predio/01.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../site/estilos.css">
+  <link rel="stylesheet" href="../jardine/estilos.css">
   <style>
     .nilo-hero .hero-titulo { font-size: clamp(2rem, 6vw, 3.5rem); }
     /* Galeria imersiva: destaques em tamanho completo */
@@ -226,17 +240,15 @@
       <div class="secao-inner">
         <p class="secao-tag">Material</p>
         <h2 class="secao-titulo">Apresentação completa</h2>
-        <p class="secao-descricao">Navegue pelo catálogo na página ou abra em tela cheia. Você também pode baixar o PDF.</p>
-        <div class="livro-pdf" id="livro-pdf">
-          <div class="livro-pdf-fallback" id="livro-pdf-fallback">
-            <p class="livro-fallback-texto">Catálogo Nilo — use os controles do navegador para passar as páginas ou abra em nova aba.</p>
-            <iframe class="livro-iframe" id="livro-iframe" src="NILO_Catalogo_Mobile.pdf-name-d7381e8a6c0406902e7cb76672f6c232e4c52af822e98a78da00606c3152fd44.pdf#view=FitH" title="Catálogo Nilo"></iframe>
-          </div>
-          <button type="button" class="botao botao-tela-cheia" id="abrir-catalogo-tela-cheia">Ver catálogo em tela cheia</button>
-          <p style="margin-top: 1rem;">
-            <a href="NILO_Catalogo_Mobile.pdf-name-d7381e8a6c0406902e7cb76672f6c232e4c52af822e98a78da00606c3152fd44.pdf" class="botao botao-secundario" download target="_blank" rel="noopener">Baixar catálogo (PDF)</a>
-          </p>
+        <p class="secao-descricao">Algumas páginas em destaque. Clique em qualquer uma ou em &ldquo;Ver todas&rdquo; para abrir a galeria completa.</p>
+        <div class="galeria-nilo-destaque" id="galeria-catalogo-destaque"></div>
+        <div class="galeria-nilo-thumbs" id="galeria-catalogo-thumbs"></div>
+        <div class="galeria-nilo-ver-mais">
+          <button type="button" class="botao botao-secundario" id="ver-galeria-catalogo" aria-label="Abrir galeria com todas as páginas do catálogo">Ver todas as <span id="total-paginas-catalogo">35</span> páginas</button>
         </div>
+        <p style="margin-top: 1rem;">
+          <a href="NILO_Catalogo_Mobile.pdf-name-d7381e8a6c0406902e7cb76672f6c232e4c52af822e98a78da00606c3152fd44.pdf" class="botao botao-secundario" download target="_blank" rel="noopener">Baixar catálogo (PDF)</a>
+        </p>
       </div>
     </section>
 
@@ -287,10 +299,10 @@
     </section>
   </main>
 
-  <div class="lightbox" id="lightbox" aria-hidden="true" aria-modal="true" role="dialog">
-    <button type="button" class="lightbox-fechar" id="lightbox-fechar" aria-label="Fechar">×</button>
-    <button type="button" class="lightbox-prev" id="lightbox-prev" aria-label="Anterior">←</button>
-    <button type="button" class="lightbox-next" id="lightbox-next" aria-label="Próxima">→</button>
+  <div class="lightbox" id="lightbox" aria-hidden="true" aria-modal="true" role="dialog" aria-label="Visualização em tela cheia">
+    <button type="button" class="lightbox-fechar" id="lightbox-fechar" aria-label="Fechar"></button>
+    <button type="button" class="lightbox-prev" id="lightbox-prev" aria-label="Anterior"></button>
+    <button type="button" class="lightbox-next" id="lightbox-next" aria-label="Próxima"></button>
     <div class="lightbox-conteudo">
       <img class="lightbox-img" id="lightbox-img" src="" alt="" style="display:none;">
     </div>
@@ -309,6 +321,15 @@
   <script>
     (function() {
       var predioImgs = ['00a.jpg','00b.jpg','00c.jpg','00d.jpg','01.jpg','02.jpg','03.jpg','04.jpg','05.jpg','06.jpg','07.jpg','08.jpg','09.jpg','10.jpg','11.jpg','13.jpg','14.jpg','14b.jpg','14c.jpg','15.jpg','15b.jpg','16.jpg','19.jpg','19b.jpg','20.jpg','22.jpg','23.jpg','23b.jpg','26.jpg','27.jpg','29.jpg','30.jpg','31.jpg','32.jpg','34.jpg'];
+      var catalogoImgs = [
+        'catalog-pagina-01.png', 'catalog-pagina-02.png', 'catalog-pagina-03.png', 'catalog-pagina-04.png', 'catalog-pagina-05.png',
+        'catalog-pagina-06.png', 'catalog-pagina-07.png', 'catalog-pagina-08.png', 'catalog-pagina-09.png', 'catalog-pagina-10.png',
+        'catalog-pagina-11.png', 'catalog-pagina-12.png', 'catalog-pagina-13.png', 'catalog-pagina-14.png', 'catalog-pagina-15.png',
+        'catalog-pagina-16.png', 'catalog-pagina-17.png', 'catalog-pagina-18.png', 'catalog-pagina-19.png', 'catalog-pagina-20.png',
+        'catalog-pagina-21.png', 'catalog-pagina-22.png', 'catalog-pagina-23.png', 'catalog-pagina-24.png', 'catalog-pagina-25.png',
+        'catalog-pagina-26.png', 'catalog-pagina-27.png', 'catalog-pagina-28.png', 'catalog-pagina-29.png', 'catalog-pagina-30.png',
+        'catalog-pagina-31.png', 'catalog-pagina-32.png', 'catalog-pagina-33.png', 'catalog-pagina-34.png', 'catalog-pagina-35.png'
+      ].map(function(src, i) { return { src: src, legenda: 'Página ' + (i + 1) }; });
       var listas = {
         predio: predioImgs.map(function(s) { return { src: 'Predio/' + s, legenda: '' }; }),
         plantas: [
@@ -319,7 +340,8 @@
           { src: 'Plantas/NL_tipo_4.jpg', legenda: 'Tipo 4' },
           { src: 'Plantas/NL_tipo_5.jpg', legenda: 'Tipo 5' }
         ],
-        lazer: [{ src: 'Plantas/NL_lazer.jpg', legenda: 'Planta de lazer' }]
+        lazer: [{ src: 'Plantas/NL_lazer.jpg', legenda: 'Planta de lazer' }],
+        catalogo: catalogoImgs
       };
 
       // Prédio: 3 destaques (índices 0, 4, 8) + 6 thumbs (índices 10–15)
@@ -452,11 +474,45 @@
         lazerFig.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); abrirLightbox(listas.lazer, 0); } });
       }
 
-      var btnCatalogoTelaCheia = document.getElementById('abrir-catalogo-tela-cheia');
-      if (btnCatalogoTelaCheia) {
-        btnCatalogoTelaCheia.addEventListener('click', function() {
-          window.open('NILO_Catalogo_Mobile.pdf-name-d7381e8a6c0406902e7cb76672f6c232e4c52af822e98a78da00606c3152fd44.pdf', '_blank', 'noopener');
-        });
+      var catalogoDestaqueIdx = [0, 1, 2];
+      var catalogoThumbsIdx = [3, 4, 5, 6, 7, 8];
+      function renderCatalogoGaleria() {
+        var destaqueEl = document.getElementById('galeria-catalogo-destaque');
+        var thumbsEl = document.getElementById('galeria-catalogo-thumbs');
+        var totalSpan = document.getElementById('total-paginas-catalogo');
+        if (totalSpan) totalSpan.textContent = listas.catalogo.length;
+        if (destaqueEl) {
+          destaqueEl.innerHTML = '';
+          catalogoDestaqueIdx.forEach(function(i) {
+            var item = listas.catalogo[i];
+            if (!item) return;
+            var fig = document.createElement('figure');
+            fig.setAttribute('role', 'button');
+            fig.setAttribute('tabindex', '0');
+            fig.dataset.index = i;
+            fig.innerHTML = '<img src="' + item.src + '" alt="Catálogo página ' + (i + 1) + '" loading="' + (i === 0 ? 'eager' : 'lazy') + '">';
+            destaqueEl.appendChild(fig);
+          });
+        }
+        if (thumbsEl) {
+          thumbsEl.innerHTML = '';
+          catalogoThumbsIdx.forEach(function(i) {
+            var item = listas.catalogo[i];
+            if (!item) return;
+            var fig = document.createElement('figure');
+            fig.setAttribute('role', 'button');
+            fig.setAttribute('tabindex', '0');
+            fig.dataset.index = i;
+            fig.innerHTML = '<img src="' + item.src + '" alt="Catálogo página ' + (i + 1) + '" loading="lazy">';
+            thumbsEl.appendChild(fig);
+          });
+        }
+      }
+      renderCatalogoGaleria();
+      delegateClick('galeria-catalogo-destaque', listas.catalogo);
+      delegateClick('galeria-catalogo-thumbs', listas.catalogo);
+      if (document.getElementById('ver-galeria-catalogo')) {
+        document.getElementById('ver-galeria-catalogo').addEventListener('click', function() { abrirLightbox(listas.catalogo, 0); });
       }
 
       var navToggle = document.getElementById('nav-toggle');

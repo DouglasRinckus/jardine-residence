@@ -5,7 +5,7 @@ PT e ES · Plantas, vídeo, galeria, forma de pagamento, localização e correto
 
 ## Rodar localmente
 
-Abra `site/index.html` no navegador. O site precisa estar dentro da pasta **Empreendimento Jardini** (junto das pastas 1–7 e da foto da corretora) para os links relativos funcionarem.
+Abra `jardine/index.html` no navegador. O site precisa estar dentro da pasta **Empreendimento Jardini** (junto das pastas 1–7 e da foto da corretora) para os links relativos funcionarem.
 
 ## Subir no Git e publicar
 
@@ -40,8 +40,8 @@ git commit -m "Site Jardine Residence"
 
 ## Onde publicar o site
 
-- **Vercel** (vercel.com): Import Project → escolha o repositório. Ver `site/DEPLOY.md`.
+- **Vercel** (vercel.com): Import Project → escolha o repositório. Ver `jardine/DEPLOY.md`.
 - **GitHub Pages**: no repositório, **Settings** → **Pages** → Source: **Deploy from a branch** → branch **main** → pasta **/ (root)**. O site ficará em `https://SEU_USUARIO.github.io/jardine-residence/`.  
-  (Para o Pages funcionar com as pastas de mídia, o `index.html` e as pastas 1–7 precisam estar na raiz do repo; ver detalhes em `site/DEPLOY.md`.)
+  (Para o Pages funcionar com as pastas de mídia, o `index.html` e as pastas 1–7 precisam estar na raiz do repo; ver detalhes em `jardine/DEPLOY.md`.)
 
 **Sim, o GitHub também permite publicar o site** usando GitHub Pages, de graça.

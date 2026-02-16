@@ -47,7 +47,7 @@ Depois de redimensionar (ou sempre que quiser só “apertar” o PNG sem mudar 
 ### Passo 3: Subir as alterações
 
 ```bash
-git add site/img/
+git add jardine/img/
 git add scripts/redimensionar-png-max-mb.sh   # se tiver alterado/adicionado
 git commit -m "Redimensionar/otimizar PNGs (máx. 10 MB)"
 git push origin main
@@ -77,7 +77,7 @@ Assim você pode repetir o processo no futuro sempre que quiser reduzir de novo 
 
 ### TinyPNG
 - **Site:** [https://tinypng.com](https://tinypng.com)
-- Arraste a pasta `site/img` (ou os PNGs) e faça o upload; baixe os arquivos otimizados e substitua os atuais.
+- Arraste a pasta `jardine/img` (ou os PNGs) e faça o upload; baixe os arquivos otimizados e substitua os atuais.
 - Usa compressão “inteligente”: reduz bastante o tamanho com perda visual mínima (quase imperceptível).
 
 ### Squoosh (Google)
@@ -89,7 +89,7 @@ Assim você pode repetir o processo no futuro sempre que quiser reduzir de novo 
 - **TinyPNG:** mais rápido, arrastar e baixar.
 - **Squoosh:** mais controle (WebP lossless, PNG otimizado, comparação visual).
 
-Depois de gerar os arquivos, substitua o conteúdo de `site/img/` pelos otimizados, rode `node scripts/build-img-manifest.js` e faça commit + push (e LFS, se usar).
+Depois de gerar os arquivos, substitua o conteúdo de `jardine/img/` pelos otimizados, rode `node scripts/build-img-manifest.js` e faça commit + push (e LFS, se usar).
 
 ---
 
@@ -106,7 +106,7 @@ O formato **WebP** pode ser **lossless** (sem perda): mesma qualidade do PNG, ar
 
 2. Converta todos os PNG da apresentação para WebP lossless:
    ```bash
-   cd "Empreendimento Jardini/site/img/apresentacao"
+   cd "Empreendimento Jardini/jardine/img/apresentacao"
    for f in *.png; do cwebp -lossless -q 100 "$f" -o "${f%.png}.webp"; done
    ```
 
@@ -124,8 +124,8 @@ Se quiser seguir esse caminho, podemos adaptar o `manifest` e o código do light
 
 Ferramentas que só removem dados desnecessários do PNG (sem mudar pixels):
 
-- **Oxipng** (Rust): `brew install oxipng` e depois `oxipng -o 6 site/img/**/*.png`
-- **OptiPNG**: `brew install optipng` e depois `optipng -o6 site/img/**/*.png`
+- **Oxipng** (Rust): `brew install oxipng` e depois `oxipng -o 6 jardine/img/**/*.png`
+- **OptiPNG**: `brew install optipng` e depois `optipng -o6 jardine/img/**/*.png`
 
 O arquivo continua PNG; só o tamanho em disco diminui, sem perda de qualidade.
 

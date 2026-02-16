@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Otimiza todos os PNG em site/img com Oxipng (sem perda de qualidade).
+# Otimiza todos os PNG em jardine/img com Oxipng (sem perda de qualidade).
 # Reduz tamanho em disco mantendo qualidade idêntica.
 #
 # Mais rápido: nível 2 (padrão) e vários arquivos em paralelo.
@@ -16,7 +16,7 @@
 #   ./scripts/otimizar-png-oxipng.sh
 set -e
 BASE="$(cd "$(dirname "$0")/.." && pwd)"
-IMG="$BASE/site/img"
+IMG="$BASE/jardine/img"
 
 # Nível de compressão: 0 (rápido) a 6 (máximo, lento). Padrão 2 = bom e rápido.
 OXIPNG_LEVEL="${OXIPNG_LEVEL:-2}"
