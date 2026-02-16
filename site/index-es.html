@@ -470,6 +470,7 @@
           if (livroPagina) livroPagina.style.display = 'none';
           var imgs = m.apresentacao;
           var idx = 0;
+          var keyboardEnabled = false;
           function showGaleriaPage(i) {
             idx = Math.max(0, Math.min(i, imgs.length - 1));
             if (galeriaImg) galeriaImg.src = (imgs[idx].indexOf('img/') === 0 && mediaBase) ? mediaBase + imgs[idx] : base + imgs[idx];
@@ -477,9 +478,33 @@
             if (btnPrev) btnPrev.disabled = idx <= 0;
             if (btnNext) btnNext.disabled = idx >= imgs.length - 1;
           }
+          function enableKeyboard() {
+            if (keyboardEnabled) return;
+            keyboardEnabled = true;
+            document.addEventListener('keydown', function(e) {
+              if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
+              if (e.key === 'ArrowLeft' && idx > 0) {
+                e.preventDefault();
+                showGaleriaPage(idx - 1);
+              } else if (e.key === 'ArrowRight' && idx < imgs.length - 1) {
+                e.preventDefault();
+                showGaleriaPage(idx + 1);
+              }
+            });
+          }
           showGaleriaPage(0);
-          if (btnPrev) btnPrev.addEventListener('click', function() { showGaleriaPage(idx - 1); });
-          if (btnNext) btnNext.addEventListener('click', function() { showGaleriaPage(idx + 1); });
+          if (btnPrev) {
+            btnPrev.addEventListener('click', function() {
+              enableKeyboard();
+              showGaleriaPage(idx - 1);
+            });
+          }
+          if (btnNext) {
+            btnNext.addEventListener('click', function() {
+              enableKeyboard();
+              showGaleriaPage(idx + 1);
+            });
+          }
           return;
         }
         initPdf();
@@ -489,6 +514,7 @@
         if (window.location.protocol === 'file:') { showIframeFallback(); return; }
         if (typeof pdfjsLib === 'undefined') { showIframeFallback(); return; }
         var pdfDoc = null, pageNum = 1, totalPages = 0, pageCache = [];
+        var keyboardEnabled = false;
         var canvas = document.getElementById('pdf-canvas');
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
         function getScaleForPage(page) {
@@ -524,6 +550,20 @@
             if (btnNext) btnNext.disabled = pageNum >= totalPages;
           });
         }
+        function enableKeyboard() {
+          if (keyboardEnabled) return;
+          keyboardEnabled = true;
+          document.addEventListener('keydown', function(e) {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
+            if (e.key === 'ArrowLeft' && pageNum > 1) {
+              e.preventDefault();
+              renderPage(pageNum - 1);
+            } else if (e.key === 'ArrowRight' && pageNum < totalPages) {
+              e.preventDefault();
+              renderPage(pageNum + 1);
+            }
+          });
+        }
         pdfjsLib.getDocument(pdfPath).promise.then(function(pdf) {
           pdfDoc = pdf;
           totalPages = pdf.numPages;
@@ -538,8 +578,18 @@
         }).catch(function() {
           showIframeFallback();
         });
-        if (btnPrev) btnPrev.addEventListener('click', function() { renderPage(pageNum - 1); });
-        if (btnNext) btnNext.addEventListener('click', function() { renderPage(pageNum + 1); });
+        if (btnPrev) {
+          btnPrev.addEventListener('click', function() {
+            enableKeyboard();
+            renderPage(pageNum - 1);
+          });
+        }
+        if (btnNext) {
+          btnNext.addEventListener('click', function() {
+            enableKeyboard();
+            renderPage(pageNum + 1);
+          });
+        }
         window.addEventListener('resize', function() {
           if (pdfDoc && pageNum >= 1) renderPage(pageNum);
         });
