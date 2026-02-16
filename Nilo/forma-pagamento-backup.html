@@ -1,0 +1,41 @@
+<!--
+  Backup do bloco "Forma de pagamento" (tabela com valores).
+  Use este código quando tiver os valores e quiser voltar à tabela por tipologia.
+  Substitua a seção #forma-pagamento no index.html por este conteúdo (ou combine
+  com a seção da Promoção de Carnaval).
+-->
+<section class="secao secao-escura" id="forma-pagamento">
+  <div class="secao-inner">
+    <p class="secao-tag">Condições</p>
+    <h2 class="secao-titulo">Forma de pagamento</h2>
+    <p class="secao-descricao">Valores por tipologia. Selecione uma opção e escolha a moeda para ver o detalhamento.</p>
+    <div class="forma-moeda">
+      <span class="forma-moeda-label">Ver valores em:</span>
+      <button type="button" class="forma-moeda-btn forma-moeda-ativa" data-moeda="BRL">R$ (Real)</button>
+      <button type="button" class="forma-moeda-btn" data-moeda="USD">US$ (Dólar)</button>
+    </div>
+    <div class="forma-pagamento-layout">
+      <nav class="forma-pagamento-tabs" role="tablist">
+        <!-- Tabs por tipologia (ex: Tipo 1, Tipo 2...) com data-brl e data-usd -->
+      </nav>
+      <div class="forma-pagamento-conteudo">
+        <p class="forma-cartao-tipo">Tipo X — descrição · Unidade XXX</p>
+        <div class="forma-tabela-wrapper">
+          <table class="forma-tabela">
+            <thead>
+              <tr><th>Item</th><th class="forma-tabela-valor">Valor</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Valor total</td><td class="forma-tabela-valor">R$ XXX</td></tr>
+              <tr><td>Entrada (15% no ato)</td><td class="forma-tabela-valor">R$ XXX</td></tr>
+              <tr><td>Saldo — parcelas / reforços</td><td class="forma-tabela-valor">R$ XXX</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="cta-secao">
+      <a href="#contato" class="botao botao-primario">Quero saber mais — Fale conosco</a>
+    </div>
+  </div>
+</section>

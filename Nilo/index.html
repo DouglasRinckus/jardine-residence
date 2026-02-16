@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0f172a">
+  <title>Nilo — Empreendimento</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../site/estilos.css">
+  <style>
+    .nilo-hero .hero-titulo { font-size: clamp(2rem, 6vw, 3.5rem); }
+    /* Galeria imersiva: destaques em tamanho completo */
+    .galeria-nilo-destaque { display: grid; gap: 0.5rem; margin-bottom: 1.5rem; }
+    .galeria-nilo-destaque figure { margin: 0; border-radius: var(--raio, 12px); overflow: hidden; cursor: pointer; }
+    .galeria-nilo-destaque img { width: 100%; height: auto; min-height: 280px; max-height: 75vh; object-fit: cover; display: block; }
+    .galeria-nilo-destaque figcaption { display: none; }
+    @media (min-width: 768px) {
+      .galeria-nilo-destaque { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+      .galeria-nilo-destaque figure:first-child { grid-column: 1 / -1; }
+      .galeria-nilo-destaque figure:first-child img { max-height: 70vh; }
+    }
+    .galeria-nilo-thumbs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-bottom: 1rem; }
+    .galeria-nilo-thumbs figure { margin: 0; border-radius: var(--raio); overflow: hidden; cursor: pointer; }
+    .galeria-nilo-thumbs img { width: 100%; height: 120px; object-fit: cover; display: block; }
+    .galeria-nilo-thumbs figcaption { display: none; }
+    @media (min-width: 600px) { .galeria-nilo-thumbs { grid-template-columns: repeat(6, 1fr); } .galeria-nilo-thumbs img { height: 100px; } }
+    .galeria-nilo-ver-mais { text-align: center; margin-top: 1rem; }
+    .galeria-nilo-ver-mais .botao { font-size: 0.95rem; }
+    /* Plantas: uma grande + grid menor */
+    .galeria-plantas-nilo { display: grid; gap: 1rem; }
+    .galeria-plantas-nilo .planta-destaque { margin: 0; border-radius: var(--raio); overflow: hidden; cursor: pointer; }
+    .galeria-plantas-nilo .planta-destaque img { width: 100%; height: auto; max-height: 70vh; object-fit: contain; background: #f1f5f9; display: block; }
+    .galeria-plantas-nilo .plantas-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.75rem; }
+    .galeria-plantas-nilo .plantas-grid figure { margin: 0; border-radius: var(--raio); overflow: hidden; cursor: pointer; box-shadow: var(--sombra); }
+    .galeria-plantas-nilo .plantas-grid img { width: 100%; height: 180px; object-fit: cover; display: block; }
+    .galeria-plantas-nilo .plantas-grid figcaption { display: none; }
+    /* Lazer: texto e lista em largura total (padrão do site usa max-width no .secao-descricao) */
+    #lazer .secao-descricao { max-width: none; }
+    #lazer .lazer-lista { max-width: none; }
+    /* Localização: mapa ocupa largura total */
+    .localizacao-mapa-wrapper.nilo-mapa { margin-left: calc(-1 * max(1.25rem, var(--safe-left, 0))); margin-right: calc(-1 * max(1.25rem, var(--safe-right, 0))); border-radius: 0; }
+    /* Promo: banner no topo e imagem da oferta */
+    .promo-banner { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 0.5rem 1rem; padding: 0.75rem 1.25rem; background: linear-gradient(90deg, #1a365d 0%, #2c5282 100%); color: #fff; text-decoration: none; font-size: 0.95rem; font-weight: 500; text-align: center; transition: opacity 0.2s; }
+    .promo-banner:hover { opacity: 0.95; color: #fff; }
+    .promo-banner-cta { color: var(--cor-destaque, #b8860b); font-weight: 600; }
+    .promo-imagem-wrap { border-radius: var(--raio); overflow: hidden; box-shadow: var(--sombra-forte); background: #fff; margin-bottom: 1rem; }
+    .promo-imagem-wrap img { width: 100%; height: auto; display: block; }
+  </style>
+</head>
+<body>
+  <header class="cabecalho" id="cabecalho">
+    <div class="cabecalho-inner">
+      <a href="#inicio" class="logo">Nilo</a>
+      <button type="button" class="nav-toggle" id="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-overlay">
+        <span class="nav-toggle-icon"></span>
+      </button>
+      <nav class="nav" aria-label="Navegação principal">
+        <a href="#apresentacao">Apresentação</a>
+        <a href="#destaques">Diferenciais</a>
+        <a href="#predio">Prédio</a>
+        <a href="#plantas">Plantas</a>
+        <a href="#localizacao">Localização</a>
+        <a href="#lazer">Lazer</a>
+        <a href="#apresentacao">Catálogo</a>
+        <a href="#forma-pagamento">Condições</a>
+        <a href="#corretora">Corretora</a>
+        <a href="#contato" class="nav-cta">Fale conosco</a>
+      </nav>
+    </div>
+  </header>
+  <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
+    <a href="#apresentacao" class="nav-link">Apresentação</a>
+    <a href="#destaques" class="nav-link">Diferenciais</a>
+    <a href="#predio" class="nav-link">Prédio</a>
+    <a href="#plantas" class="nav-link">Plantas</a>
+    <a href="#localizacao" class="nav-link">Localização</a>
+    <a href="#lazer" class="nav-link">Lazer</a>
+    <a href="#apresentacao" class="nav-link">Catálogo</a>
+    <a href="#forma-pagamento" class="nav-link">Condições</a>
+    <a href="#corretora" class="nav-link">Corretora</a>
+    <a href="#contato" class="nav-link nav-cta">Fale conosco</a>
+  </div>
+
+  <main>
+    <a href="#forma-pagamento" class="promo-banner" id="promo-banner">
+      <span class="promo-banner-texto">Promoção Carnaval de Oportunidades — condições especiais no Nilo Residence. Aproveite!</span>
+      <span class="promo-banner-cta">Ver oferta →</span>
+    </a>
+    <section class="hero nilo-hero" id="inicio">
+      <div class="hero-bg">
+        <img src="Predio/01.jpg" alt="">
+      </div>
+      <div class="hero-overlay"></div>
+      <div class="hero-conteudo">
+        <p class="hero-tag">Empreendimento</p>
+        <h1 class="hero-titulo">Nilo</h1>
+        <p class="hero-subtitulo">Conheça o empreendimento e encontre seu novo lar.</p>
+        <div class="hero-ctas">
+          <a href="#apresentacao" class="botao botao-primario">Conheça o empreendimento</a>
+          <a href="#contato" class="botao botao-secundario">Fale com um consultor</a>
+        </div>
+      </div>
+      <a href="#destaques" class="hero-scroll" aria-label="Role para baixo"><span></span></a>
+    </section>
+
+    <section class="frase-impacto">
+      <p class="frase-texto">Mais que um apartamento — um lugar para viver bem.</p>
+    </section>
+
+    <section class="secao secao-escura secao-destaques" id="destaques">
+      <div class="secao-inner">
+        <p class="secao-tag">Proposta de valor</p>
+        <h2 class="secao-titulo secao-destaques-titulo">Diferenciais do Nilo</h2>
+        <p class="secao-destaques-sub">Conheça os benefícios que fazem do Nilo a escolha certa para o seu novo endereço.</p>
+        <div class="destaques-grid">
+          <article class="destaque-card">
+            <div class="destaque-card-num" aria-hidden="true">01</div>
+            <h3 class="destaque-card-titulo">Arquitetura e acabamento</h3>
+            <p class="destaque-card-texto">Projeto pensado para conforto e qualidade de vida, com atenção aos detalhes.</p>
+          </article>
+          <article class="destaque-card">
+            <div class="destaque-card-num" aria-hidden="true">02</div>
+            <h3 class="destaque-card-titulo">Área de lazer</h3>
+            <p class="destaque-card-texto">Espaços de convivência e lazer para aproveitar o dia a dia com a família.</p>
+          </article>
+          <article class="destaque-card">
+            <div class="destaque-card-num" aria-hidden="true">03</div>
+            <h3 class="destaque-card-titulo">Tipologias variadas</h3>
+            <p class="destaque-card-texto">Plantas que atendem diferentes necessidades — do apartamento compacto ao amplo.</p>
+          </article>
+          <article class="destaque-card">
+            <div class="destaque-card-num" aria-hidden="true">04</div>
+            <h3 class="destaque-card-titulo">Localização</h3>
+            <p class="destaque-card-texto">Próximo a serviços e com boa valorização. Consulte a corretora para o endereço exato.</p>
+          </article>
+          <article class="destaque-card">
+            <div class="destaque-card-num" aria-hidden="true">05</div>
+            <h3 class="destaque-card-titulo">Investimento</h3>
+            <p class="destaque-card-texto">Condições de pagamento e valores no catálogo. Fale com um consultor para a tabela atualizada.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="secao" id="predio">
+      <div class="secao-inner">
+        <p class="secao-tag">Fotos</p>
+        <h2 class="secao-titulo">Prédio</h2>
+        <p class="secao-descricao">Algumas fotos em destaque. Clique em qualquer uma ou em &ldquo;Ver todas&rdquo; para abrir a galeria completa.</p>
+        <div class="galeria-nilo-destaque" id="galeria-predio-destaque"></div>
+        <div class="galeria-nilo-thumbs" id="galeria-predio-thumbs"></div>
+        <div class="galeria-nilo-ver-mais">
+          <button type="button" class="botao botao-secundario" id="ver-todas-predio" aria-label="Abrir galeria com todas as fotos do prédio">Ver todas as <span id="total-fotos-predio">0</span> fotos</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="secao secao-escura" id="plantas">
+      <div class="secao-inner">
+        <p class="secao-tag">Plantas</p>
+        <h2 class="secao-titulo">Apartamentos por tipologia</h2>
+        <p class="secao-descricao">Clique em qualquer planta para ampliar. A planta de lazer está na seção Lazer.</p>
+        <div class="tipologias-resumo" style="display:grid; gap: 0.75rem; margin-bottom: 1.5rem; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));">
+          <div class="tipologia-card" style="background: rgba(255,255,255,0.08); padding: 1rem; border-radius: var(--raio);">
+            <strong>Tipo 1</strong> — 141,90 m² · 3 suítes · 2 vagas
+          </div>
+          <div class="tipologia-card" style="background: rgba(255,255,255,0.08); padding: 1rem; border-radius: var(--raio);">
+            <strong>Tipo 2</strong> — 109,22 m² · 2 suítes · 2 vagas
+          </div>
+          <div class="tipologia-card" style="background: rgba(255,255,255,0.08); padding: 1rem; border-radius: var(--raio);">
+            <strong>Tipo 3</strong> — 132,43 m² · 3 suítes · 2 vagas
+          </div>
+          <div class="tipologia-card" style="background: rgba(255,255,255,0.08); padding: 1rem; border-radius: var(--raio);">
+            <strong>Tipo 4</strong> — 130,91 m² · 3 suítes · 2 vagas
+          </div>
+          <div class="tipologia-card" style="background: rgba(255,255,255,0.08); padding: 1rem; border-radius: var(--raio);">
+            <strong>Tipo 5</strong> — 130,62 m² · 3 suítes · 2 vagas
+          </div>
+        </div>
+        <div class="galeria-plantas-nilo" id="galeria-plantas-wrap">
+          <div class="plantas-grid" id="galeria-plantas"></div>
+          <div class="galeria-nilo-ver-mais">
+            <button type="button" class="botao botao-secundario" id="ver-todas-plantas">Ver todas as plantas</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="secao" id="localizacao">
+      <div class="secao-inner">
+        <p class="secao-tag">Onde fica</p>
+        <h2 class="secao-titulo">Localização</h2>
+        <p class="secao-descricao">Nilo Residence — veja a localização no mapa e agende sua visita com a corretora.</p>
+        <div class="localizacao-mapa-wrapper nilo-mapa">
+          <iframe id="mapa-nilo" class="localizacao-mapa" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d859.1126949213849!2d-48.590039538800674!3d-27.148901455912473!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94d8af0017cc08ad%3A0x14f19d03d55adb06!2sNilo%20Residence!5e1!3m2!1spt-BR!2sbr!4v1771280870796!5m2!1spt-BR!2sbr" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Localização — Nilo Residence"></iframe>
+        </div>
+        <div class="localizacao-acoes">
+          <a href="#contato" class="botao botao-primario">Quero saber mais — Fale conosco</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="secao secao-escura" id="lazer">
+      <div class="secao-inner">
+        <p class="secao-tag">Lazer</p>
+        <h2 class="secao-titulo">Áreas de lazer</h2>
+        <p class="secao-descricao">No Nilo Residence, o lazer ganha 1.551 m² de área exclusiva, mobiliada, decorada e equipada. Há espaço para todos os gostos: piscinas adulto e infantil, deck e lounge, gourmet ao ar livre e praça de convivência, além de academia, SPA, salões de festas, coworking e muito mais. Clique na planta abaixo para ver o layout completo.</p>
+        <ul class="lazer-lista" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.25rem 1.5rem; margin: 0 0 1.5rem; padding-left: 1.25rem; font-size: 0.9rem; color: rgba(255,255,255,0.9); list-style: disc;">
+          <li>Piscinas, deck e lounge</li>
+          <li>Gourmet barbecue e gourmet campeiro</li>
+          <li>Miniquadra, playground e espaço pet</li>
+          <li>Academia, crossfit e espaço yoga</li>
+          <li>SPA, hidromassagem, sauna e sala de massagem</li>
+          <li>Salões de festas, coworking e sala de jogos</li>
+          <li>Brinquedoteca, smart market e estética</li>
+        </ul>
+        <figure class="planta-destaque" role="button" tabindex="0" data-index="0" id="galeria-lazer-fig" style="max-width: 900px; margin: 0 auto;">
+          <img src="Plantas/NL_lazer.jpg" alt="Planta de lazer — Nilo Residence, 1.551 m²" loading="lazy" style="max-height: 70vh; width: 100%; object-fit: contain; background: #f1f5f9;">
+        </figure>
+      </div>
+    </section>
+
+    <section class="secao" id="apresentacao">
+      <div class="secao-inner">
+        <p class="secao-tag">Material</p>
+        <h2 class="secao-titulo">Apresentação completa</h2>
+        <p class="secao-descricao">Navegue pelo catálogo na página ou abra em tela cheia. Você também pode baixar o PDF.</p>
+        <div class="livro-pdf" id="livro-pdf">
+          <div class="livro-pdf-fallback" id="livro-pdf-fallback">
+            <p class="livro-fallback-texto">Catálogo Nilo — use os controles do navegador para passar as páginas ou abra em nova aba.</p>
+            <iframe class="livro-iframe" id="livro-iframe" src="NILO_Catalogo_Mobile.pdf-name-d7381e8a6c0406902e7cb76672f6c232e4c52af822e98a78da00606c3152fd44.pdf#view=FitH" title="Catálogo Nilo"></iframe>
+          </div>
+          <button type="button" class="botao botao-tela-cheia" id="abrir-catalogo-tela-cheia">Ver catálogo em tela cheia</button>
+          <p style="margin-top: 1rem;">
+            <a href="NILO_Catalogo_Mobile.pdf-name-d7381e8a6c0406902e7cb76672f6c232e4c52af822e98a78da00606c3152fd44.pdf" class="botao botao-secundario" download target="_blank" rel="noopener">Baixar catálogo (PDF)</a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="secao secao-escura" id="forma-pagamento">
+      <div class="secao-inner">
+        <p class="secao-tag">Promoção</p>
+        <h2 class="secao-titulo">Carnaval de Oportunidades</h2>
+        <p class="secao-descricao">Aproveite condições especiais no Nilo Residence: unidade em oferta com entrada e parcelas que cabem no seu bolso. Confira a oferta abaixo e fale com a consultora para garantir a sua.</p>
+        <div class="promo-imagem-wrap">
+          <img src="promo_nilo_page3-3.png" alt="Oferta Nilo Residence — Promoção Carnaval de Oportunidades" loading="lazy" width="1200">
+        </div>
+        <div class="cta-secao">
+          <a href="#contato" class="botao botao-primario">Quero aproveitar a oferta — Fale conosco</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="secao secao-corretora" id="corretora">
+      <div class="secao-inner secao-corretora-inner">
+        <p class="secao-tag">Sua consultora</p>
+        <h2 class="secao-titulo">Fale com quem entende do assunto</h2>
+        <div class="corretora-card">
+          <div class="corretora-foto">
+            <img src="../Corretora Silvada Duarte Gonçalves.jpeg" alt="Silvana Duarte Gonçalves — Corretora">
+          </div>
+          <div class="corretora-info">
+            <p class="corretora-nome">Silvana Duarte Gonçalves</p>
+            <p class="corretora-cargo">Corretora de imóveis</p>
+            <p class="corretora-descricao">Atuação no litoral de Santa Catarina (Itapema, Porto Belo e região). Consultoria personalizada na compra e venda de imóveis.</p>
+            <div class="cta-botoes">
+              <a href="https://wa.me/5547999317511" class="botao botao-whatsapp" target="_blank" rel="noopener">WhatsApp</a>
+              <a href="tel:+5547999317511" class="botao botao-primario">Ligar (47) 99931-7511</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="secao secao-cta" id="contato">
+      <div class="secao-inner secao-cta-inner">
+        <h2 class="secao-titulo secao-cta-titulo">Pronto para conhecer o Nilo?</h2>
+        <p class="secao-cta-texto">Fale com um consultor e agende sua visita. Estamos à disposição para tirar dúvidas sobre valores, condições e localização.</p>
+        <div class="cta-botoes">
+          <a href="https://wa.me/5547999317511" class="botao botao-whatsapp" target="_blank" rel="noopener">WhatsApp (47) 99931-7511</a>
+          <a href="tel:+5547999317511" class="botao botao-primario">Ligar (47) 99931-7511</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true" aria-modal="true" role="dialog">
+    <button type="button" class="lightbox-fechar" id="lightbox-fechar" aria-label="Fechar">×</button>
+    <button type="button" class="lightbox-prev" id="lightbox-prev" aria-label="Anterior">←</button>
+    <button type="button" class="lightbox-next" id="lightbox-next" aria-label="Próxima">→</button>
+    <div class="lightbox-conteudo">
+      <img class="lightbox-img" id="lightbox-img" src="" alt="" style="display:none;">
+    </div>
+    <div class="lightbox-info">
+      <span class="lightbox-contador" id="lightbox-contador"></span>
+    </div>
+  </div>
+
+  <footer class="rodape">
+    <div class="rodape-inner">
+      <p class="rodape-logo">Nilo</p>
+      <p class="rodape-texto">Empreendimento — material de divulgação. Itapema · Porto Belo · SC.</p>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      var predioImgs = ['00a.jpg','00b.jpg','00c.jpg','00d.jpg','01.jpg','02.jpg','03.jpg','04.jpg','05.jpg','06.jpg','07.jpg','08.jpg','09.jpg','10.jpg','11.jpg','13.jpg','14.jpg','14b.jpg','14c.jpg','15.jpg','15b.jpg','16.jpg','19.jpg','19b.jpg','20.jpg','22.jpg','23.jpg','23b.jpg','26.jpg','27.jpg','29.jpg','30.jpg','31.jpg','32.jpg','34.jpg'];
+      var listas = {
+        predio: predioImgs.map(function(s) { return { src: 'Predio/' + s, legenda: '' }; }),
+        plantas: [
+          { src: 'Plantas/NL_lazer.jpg', legenda: 'Lazer' },
+          { src: 'Plantas/NL_tipo_1.jpg', legenda: 'Tipo 1' },
+          { src: 'Plantas/NL_tipo_2.jpg', legenda: 'Tipo 2' },
+          { src: 'Plantas/NL_tipo_3.jpg', legenda: 'Tipo 3' },
+          { src: 'Plantas/NL_tipo_4.jpg', legenda: 'Tipo 4' },
+          { src: 'Plantas/NL_tipo_5.jpg', legenda: 'Tipo 5' }
+        ],
+        lazer: [{ src: 'Plantas/NL_lazer.jpg', legenda: 'Planta de lazer' }]
+      };
+
+      // Prédio: 3 destaques (índices 0, 4, 8) + 6 thumbs (índices 10–15)
+      var destaqueIdx = [0, 4, 8];
+      var thumbsIdx = [10, 11, 12, 13, 14, 15];
+      function renderPredioGaleria() {
+        var destaqueEl = document.getElementById('galeria-predio-destaque');
+        var thumbsEl = document.getElementById('galeria-predio-thumbs');
+        var totalEl = document.getElementById('total-fotos-predio');
+        if (totalEl) totalEl.textContent = listas.predio.length;
+        if (destaqueEl) {
+          destaqueEl.innerHTML = '';
+          destaqueIdx.forEach(function(i) {
+            var item = listas.predio[i];
+            if (!item) return;
+            var fig = document.createElement('figure');
+            fig.setAttribute('role', 'button');
+            fig.setAttribute('tabindex', '0');
+            fig.dataset.index = i;
+            fig.innerHTML = '<img src="' + item.src + '" alt="Prédio Nilo" loading="' + (i === 0 ? 'eager' : 'lazy') + '">';
+            destaqueEl.appendChild(fig);
+          });
+        }
+        if (thumbsEl) {
+          thumbsEl.innerHTML = '';
+          thumbsIdx.forEach(function(i) {
+            var item = listas.predio[i];
+            if (!item) return;
+            var fig = document.createElement('figure');
+            fig.setAttribute('role', 'button');
+            fig.setAttribute('tabindex', '0');
+            fig.dataset.index = i;
+            fig.innerHTML = '<img src="' + item.src + '" alt="Prédio Nilo" loading="lazy">';
+            thumbsEl.appendChild(fig);
+          });
+        }
+      }
+      renderPredioGaleria();
+
+      // Plantas: só tipos 1–5 no grid (sem lazer, lazer está em destaque)
+      var plantasGridItems = listas.plantas.slice(1);
+      function renderPlantasGrid() {
+        var el = document.getElementById('galeria-plantas');
+        if (!el) return;
+        el.innerHTML = '';
+        plantasGridItems.forEach(function(item, i) {
+          var idx = i + 1;
+          var fig = document.createElement('figure');
+          fig.setAttribute('role', 'button');
+          fig.setAttribute('tabindex', '0');
+          fig.dataset.index = idx;
+          fig.innerHTML = '<img src="' + item.src + '" alt="' + item.legenda + '" loading="lazy">';
+          el.appendChild(fig);
+        });
+      }
+      renderPlantasGrid();
+
+      var lightbox = document.getElementById('lightbox');
+      var lbImg = document.getElementById('lightbox-img');
+      var lbContador = document.getElementById('lightbox-contador');
+      var lbFechar = document.getElementById('lightbox-fechar');
+      var lbPrev = document.getElementById('lightbox-prev');
+      var lbNext = document.getElementById('lightbox-next');
+      var listaAtual = [];
+      var idxAtual = 0;
+
+      function abrirLightbox(lista, idx) {
+        listaAtual = lista;
+        idxAtual = idx;
+        lightbox.setAttribute('aria-hidden', 'false');
+        lightbox.classList.add('lightbox-aberto');
+        document.body.style.overflow = 'hidden';
+        mostrarLb();
+        lbFechar.focus();
+      }
+      function fecharLightbox() {
+        lightbox.setAttribute('aria-hidden', 'true');
+        lightbox.classList.remove('lightbox-aberto');
+        document.body.style.overflow = '';
+        lbImg.src = '';
+      }
+      function mostrarLb() {
+        var item = listaAtual[idxAtual];
+        if (!item) return;
+        lbImg.alt = item.legenda || '';
+        lbImg.style.display = 'block';
+        lbImg.src = item.src;
+        lbContador.textContent = (idxAtual + 1) + ' / ' + listaAtual.length;
+        if (lbPrev) lbPrev.style.visibility = listaAtual.length > 1 ? 'visible' : 'hidden';
+        if (lbNext) lbNext.style.visibility = listaAtual.length > 1 ? 'visible' : 'hidden';
+      }
+
+      if (lbPrev) lbPrev.addEventListener('click', function() { if (idxAtual > 0) { idxAtual--; mostrarLb(); } });
+      if (lbNext) lbNext.addEventListener('click', function() { if (idxAtual < listaAtual.length - 1) { idxAtual++; mostrarLb(); } });
+      lbFechar.addEventListener('click', fecharLightbox);
+      lightbox.addEventListener('click', function(e) { if (e.target === lightbox) fecharLightbox(); });
+      document.addEventListener('keydown', function(e) {
+        if (lightbox.getAttribute('aria-hidden') === 'true') return;
+        if (e.key === 'Escape') fecharLightbox();
+        if (e.key === 'ArrowLeft' && idxAtual > 0) { idxAtual--; mostrarLb(); }
+        if (e.key === 'ArrowRight' && idxAtual < listaAtual.length - 1) { idxAtual++; mostrarLb(); }
+      });
+
+      function delegateClick(containerId, list, indexFn) {
+        var el = document.getElementById(containerId);
+        if (!el) return;
+        el.addEventListener('click', function(e) {
+          var fig = e.target.closest('figure');
+          if (!fig || fig.dataset.index === undefined) return;
+          var i = parseInt(fig.dataset.index, 10);
+          var idx = typeof indexFn === 'function' ? indexFn(i) : i;
+          abrirLightbox(list, idx);
+        });
+        el.querySelectorAll('figure').forEach(function(fig) {
+          fig.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fig.click(); }
+          });
+        });
+      }
+      delegateClick('galeria-predio-destaque', listas.predio);
+      delegateClick('galeria-predio-thumbs', listas.predio);
+      document.getElementById('ver-todas-predio').addEventListener('click', function() { abrirLightbox(listas.predio, 0); });
+
+      delegateClick('galeria-plantas', listas.plantas);
+      document.getElementById('ver-todas-plantas').addEventListener('click', function() { abrirLightbox(listas.plantas, 0); });
+
+      var lazerFig = document.getElementById('galeria-lazer-fig');
+      if (lazerFig) {
+        lazerFig.addEventListener('click', function() { abrirLightbox(listas.lazer, 0); });
+        lazerFig.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); abrirLightbox(listas.lazer, 0); } });
+      }
+
+      var btnCatalogoTelaCheia = document.getElementById('abrir-catalogo-tela-cheia');
+      if (btnCatalogoTelaCheia) {
+        btnCatalogoTelaCheia.addEventListener('click', function() {
+          window.open('NILO_Catalogo_Mobile.pdf-name-d7381e8a6c0406902e7cb76672f6c232e4c52af822e98a78da00606c3152fd44.pdf', '_blank', 'noopener');
+        });
+      }
+
+      var navToggle = document.getElementById('nav-toggle');
+      var navOverlay = document.getElementById('nav-overlay');
+      if (navToggle && navOverlay) {
+        navToggle.addEventListener('click', function() {
+          var open = navOverlay.getAttribute('aria-hidden') !== 'true';
+          navOverlay.setAttribute('aria-hidden', open ? 'false' : 'true');
+          navOverlay.classList.toggle('aberto', open);
+          navToggle.setAttribute('aria-expanded', !open);
+          document.body.style.overflow = open ? 'hidden' : '';
+        });
+        navOverlay.querySelectorAll('.nav-link').forEach(function(a) {
+          a.addEventListener('click', function() {
+            navOverlay.setAttribute('aria-hidden', 'true');
+            navOverlay.classList.remove('aberto');
+            navToggle.setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
+          });
+        });
+      }
+      window.addEventListener('scroll', function() {
+        document.getElementById('cabecalho').classList.toggle('cabecalho-sombra', window.scrollY > 20);
+      });
+
+      var els = document.querySelectorAll('.secao, .frase-impacto, .galeria-nilo figure, .destaque-card');
+      if (typeof IntersectionObserver !== 'undefined') {
+        var io = new IntersectionObserver(function(entries) {
+          entries.forEach(function(e) {
+            if (e.isIntersecting) e.target.classList.add('visivel');
+          });
+        }, { rootMargin: '0px 0px -40px 0px', threshold: 0.05 });
+        els.forEach(function(el) { io.observe(el); });
+      }
+    })();
+  </script>
+</body>
+</html>
