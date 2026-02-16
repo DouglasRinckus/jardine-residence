@@ -12,8 +12,11 @@
   <meta property="og:description" content="Conheça o Nilo Residence. Plantas, lazer, localização e condições. Fale com a consultora e agende sua visita.">
   <meta property="og:url" content="https://imoveis.silvanaduarteimoveis.com.br/Nilo/">
   <meta property="og:image" content="https://imoveis.silvanaduarteimoveis.com.br/Nilo/Predio/01.jpg">
+  <meta property="og:image:secure_url" content="https://imoveis.silvanaduarteimoveis.com.br/Nilo/Predio/01.jpg">
+  <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Nilo Residence — Vista do empreendimento">
   <meta property="og:site_name" content="Nilo Residence">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Nilo Residence — Empreendimento">
@@ -42,6 +45,12 @@
     @media (min-width: 600px) { .galeria-nilo-thumbs { grid-template-columns: repeat(6, 1fr); } .galeria-nilo-thumbs img { height: 100px; } }
     .galeria-nilo-ver-mais { text-align: center; margin-top: 1rem; }
     .galeria-nilo-ver-mais .botao { font-size: 0.95rem; }
+    /* Catálogo: uma imagem principal em tamanho completo + galeria de miniaturas */
+    #galeria-catalogo-destaque { grid-template-columns: 1fr; }
+    #galeria-catalogo-destaque img { min-height: 0; max-height: none; object-fit: contain; background: #f1f5f9; }
+    @media (min-width: 768px) {
+      #galeria-catalogo-destaque figure:first-child { grid-column: auto; }
+    }
     /* Plantas: uma grande + grid menor */
     .galeria-plantas-nilo { display: grid; gap: 1rem; }
     .galeria-plantas-nilo .planta-destaque { margin: 0; border-radius: var(--raio); overflow: hidden; cursor: pointer; }
@@ -474,8 +483,8 @@
         lazerFig.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); abrirLightbox(listas.lazer, 0); } });
       }
 
-      var catalogoDestaqueIdx = [0, 1, 2];
-      var catalogoThumbsIdx = [3, 4, 5, 6, 7, 8];
+      var catalogoDestaqueIdx = [0];
+      var catalogoThumbsIdx = [1, 2, 3, 4, 5, 6, 7, 8];
       function renderCatalogoGaleria() {
         var destaqueEl = document.getElementById('galeria-catalogo-destaque');
         var thumbsEl = document.getElementById('galeria-catalogo-thumbs');
