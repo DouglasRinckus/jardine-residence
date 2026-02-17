@@ -9,19 +9,19 @@
   <meta property="og:type" content="website">
   <meta property="og:locale" content="pt_BR">
   <meta property="og:title" content="Nilo Residence — Empreendimento">
-  <meta property="og:description" content="Conheça o Nilo Residence. Plantas, lazer, localização e condições. Fale com a consultora e agende sua visita.">
+  <meta property="og:description" content="Apartamentos em Itapema/SC com condições especiais. Veja plantas, fotos do prédio e ofertas — seu novo lar no litoral pode estar aqui. Fale com a consultora.">
   <meta property="og:url" content="https://imoveis.silvanaduarteimoveis.com.br/Nilo/">
-  <meta property="og:image" content="https://imoveis.silvanaduarteimoveis.com.br/Nilo/Predio/01.jpg">
-  <meta property="og:image:secure_url" content="https://imoveis.silvanaduarteimoveis.com.br/Nilo/Predio/01.jpg">
-  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image" content="https://imoveis.silvanaduarteimoveis.com.br/Nilo/catalog-pagina-01.png">
+  <meta property="og:image:secure_url" content="https://imoveis.silvanaduarteimoveis.com.br/Nilo/catalog-pagina-01.png">
+  <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Nilo Residence — Vista do empreendimento">
+  <meta property="og:image:alt" content="Nilo Residence — Capa do catálogo do empreendimento">
   <meta property="og:site_name" content="Nilo Residence">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Nilo Residence — Empreendimento">
-  <meta name="twitter:description" content="Conheça o Nilo Residence. Plantas, lazer e condições em Itapema/SC.">
-  <meta name="twitter:image" content="https://imoveis.silvanaduarteimoveis.com.br/Nilo/Predio/01.jpg">
+  <meta name="twitter:description" content="Apartamentos em Itapema/SC com condições especiais. Veja plantas, fotos e ofertas — fale com a consultora.">
+  <meta name="twitter:image" content="https://imoveis.silvanaduarteimoveis.com.br/Nilo/catalog-pagina-01.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -45,9 +45,9 @@
     @media (min-width: 600px) { .galeria-nilo-thumbs { grid-template-columns: repeat(6, 1fr); } .galeria-nilo-thumbs img { height: 100px; } }
     .galeria-nilo-ver-mais { text-align: center; margin-top: 1rem; }
     .galeria-nilo-ver-mais .botao { font-size: 0.95rem; }
-    /* Catálogo: uma imagem principal em tamanho completo + galeria de miniaturas */
-    #galeria-catalogo-destaque { grid-template-columns: 1fr; }
-    #galeria-catalogo-destaque img { min-height: 0; max-height: none; object-fit: contain; background: #f1f5f9; }
+    /* Catálogo: uma imagem principal (inteira) em container com tamanho máximo alinhado ao site */
+    #galeria-catalogo-destaque { grid-template-columns: 1fr; max-width: 900px; margin-left: auto; margin-right: auto; }
+    #galeria-catalogo-destaque img { min-height: 0; max-height: 70vh; object-fit: contain; background: #f1f5f9; display: block; width: 100%; height: auto; }
     @media (min-width: 768px) {
       #galeria-catalogo-destaque figure:first-child { grid-column: auto; }
     }
